@@ -1,0 +1,107 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows10.0.22000.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="YoloSharp\**" />
+    <EmbeddedResource Remove="YoloSharp\**" />
+    <None Remove="YoloSharp\**" />
+    <Page Remove="YoloSharp\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Dll\MaterialDesignColors.dll" />
+    <None Remove="Dll\MaterialDesignThemes.Wpf.dll" />
+    <None Remove="Dll\Microsoft.Xaml.Behaviors.dll" />
+    <None Remove="PreTrainedModels\F16\yolov11n-seg.bin" />
+    <None Remove="PreTrainedModels\F16\yolov8n-seg.bin" />
+    <None Remove="PreTrainedModels\F32\yolov11n-seg.bin" />
+    <None Remove="PreTrainedModels\F32\yolov8n-seg.bin" />
+    <None Remove="WConfig.json" />
+    <None Remove="XJULogo.ico" />
+    <None Remove="XJULogob.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Dll\MaterialDesignColors.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Dll\MaterialDesignThemes.Wpf.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Dll\Microsoft.Xaml.Behaviors.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PreTrainedModels\F16\yolov11n-seg.bin">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PreTrainedModels\F16\yolov8n-seg.bin">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PreTrainedModels\F32\yolov11n-seg.bin">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PreTrainedModels\F32\yolov8n-seg.bin">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="WConfig.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="XJULogo.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="XJULogob.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="libtorch-cpu-win-x64" Version="2.5.1" />
+    <PackageReference Include="libtorch-cuda-12.1-win-x64" Version="2.5.1" />
+    <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="14.6.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="NumpyDotNet" Version="0.9.87.2" />
+    <PackageReference Include="TorchSharp" Version="0.105.0" />
+    <PackageReference Include="TorchVision" Version="0.105.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GDIWpfControl\GDIWpfControl.csproj" />
+    <ProjectReference Include="..\YoloSharp\YoloSharp.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="MaterialDesignColors">
+      <HintPath>..\..\..\Github\MaterialDesignInXamlToolkit-20250615\MaterialDesignInXamlToolkit-master\src\MaterialDesignThemes.Wpf\bin\Release\net8.0-windows\MaterialDesignColors.dll</HintPath>
+    </Reference>
+    <Reference Include="MaterialDesignThemes.Wpf">
+      <HintPath>..\..\..\Github\MaterialDesignInXamlToolkit-20250615\MaterialDesignInXamlToolkit-master\src\MaterialDesignThemes.Wpf\bin\Release\net8.0-windows\MaterialDesignThemes.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xaml.Behaviors">
+      <HintPath>..\..\..\Github\MaterialDesignInXamlToolkit-20250615\MaterialDesignInXamlToolkit-master\src\MaterialDesignThemes.Wpf\bin\Release\net8.0-windows\Microsoft.Xaml.Behaviors.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+</Project>

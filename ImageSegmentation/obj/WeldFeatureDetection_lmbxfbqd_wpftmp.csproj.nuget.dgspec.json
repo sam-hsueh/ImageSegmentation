@@ -1,0 +1,219 @@
+{
+  "format": 1,
+  "restore": {
+    "D:\\ImageFeatureAnnotation\\WeldFeatureDetection2\\WeldFeatureDetection\\WeldFeatureDetection.csproj": {}
+  },
+  "projects": {
+    "D:\\ImageFeatureAnnotation\\WeldFeatureDetection2\\GDIWpfControl\\GDIWpfControl.csproj": {
+      "restore": {
+        "projectUniqueName": "D:\\ImageFeatureAnnotation\\WeldFeatureDetection2\\GDIWpfControl\\GDIWpfControl.csproj",
+        "projectName": "GDIWpfControl",
+        "projectPath": "D:\\ImageFeatureAnnotation\\WeldFeatureDetection2\\GDIWpfControl\\GDIWpfControl.csproj",
+        "UsingMicrosoftNETSdk": false,
+        "frameworks": {
+          "net48": {
+            "projectReferences": {}
+          }
+        }
+      },
+      "frameworks": {
+        "net48": {}
+      }
+    },
+    "D:\\ImageFeatureAnnotation\\WeldFeatureDetection2\\WeldFeatureDetection\\WeldFeatureDetection.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\ImageFeatureAnnotation\\WeldFeatureDetection2\\WeldFeatureDetection\\WeldFeatureDetection.csproj",
+        "projectName": "WeldFeatureDetection",
+        "projectPath": "D:\\ImageFeatureAnnotation\\WeldFeatureDetection2\\WeldFeatureDetection\\WeldFeatureDetection.csproj",
+        "packagesPath": "C:\\Users\\薛瑞雷\\.nuget\\packages\\",
+        "outputPath": "D:\\ImageFeatureAnnotation\\WeldFeatureDetection2\\WeldFeatureDetection\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\薛瑞雷\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0-windows10.0.22000.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0-windows10.0.22000": {
+            "targetAlias": "net8.0-windows10.0.22000.0",
+            "projectReferences": {
+              "D:\\ImageFeatureAnnotation\\WeldFeatureDetection2\\GDIWpfControl\\GDIWpfControl.csproj": {
+                "projectPath": "D:\\ImageFeatureAnnotation\\WeldFeatureDetection2\\GDIWpfControl\\GDIWpfControl.csproj"
+              },
+              "D:\\ImageFeatureAnnotation\\WeldFeatureDetection2\\YoloSharp\\YoloSharp.csproj": {
+                "projectPath": "D:\\ImageFeatureAnnotation\\WeldFeatureDetection2\\YoloSharp\\YoloSharp.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.200"
+      },
+      "frameworks": {
+        "net8.0-windows10.0.22000": {
+          "targetAlias": "net8.0-windows10.0.22000.0",
+          "dependencies": {
+            "Magick.NET-Q8-AnyCPU": {
+              "target": "Package",
+              "version": "[14.6.0, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.3, )"
+            },
+            "NumpyDotNet": {
+              "target": "Package",
+              "version": "[0.9.87.1, )"
+            },
+            "TorchSharp": {
+              "target": "Package",
+              "version": "[0.105.0, )"
+            },
+            "TorchVision": {
+              "target": "Package",
+              "version": "[0.105.0, )"
+            },
+            "libtorch-cpu-win-x64": {
+              "target": "Package",
+              "version": "[2.5.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.Windows.SDK.NET.Ref",
+              "version": "[10.0.22000.57, 10.0.22000.57]"
+            }
+          ],
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            },
+            "Microsoft.Windows.SDK.NET.Ref.Windows": {
+              "privateAssets": "all"
+            },
+            "Microsoft.WindowsDesktop.App": {
+              "privateAssets": "none"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.204/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\ImageFeatureAnnotation\\WeldFeatureDetection2\\YoloSharp\\YoloSharp.csproj": {
+      "version": "1.1.7",
+      "restore": {
+        "projectUniqueName": "D:\\ImageFeatureAnnotation\\WeldFeatureDetection2\\YoloSharp\\YoloSharp.csproj",
+        "projectName": "IntptrMax.YoloSharp",
+        "projectPath": "D:\\ImageFeatureAnnotation\\WeldFeatureDetection2\\YoloSharp\\YoloSharp.csproj",
+        "packagesPath": "C:\\Users\\薛瑞雷\\.nuget\\packages\\",
+        "outputPath": "D:\\ImageFeatureAnnotation\\WeldFeatureDetection2\\YoloSharp\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\薛瑞雷\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.200"
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Magick.NET-Q8-AnyCPU": {
+              "target": "Package",
+              "version": "[14.6.0, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.3, )"
+            },
+            "TorchSharp": {
+              "target": "Package",
+              "version": "[0.105.0, )"
+            },
+            "TorchVision": {
+              "target": "Package",
+              "version": "[0.105.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.204\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

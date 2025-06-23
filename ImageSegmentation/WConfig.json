@@ -1,0 +1,146 @@
+{
+  "Motion": {
+    "IP": "192.168.45.2",
+    "Port": 23,
+    "SPort": 3240
+  },
+  "PLC": {
+    "IP": "192.168.45.100",
+    "CPU": 5,
+    "Slot": 1,
+    "Rack": 0,
+    "Port": 102,
+    "StartArc": 46
+  },
+
+  "Parameters": [
+    {
+      "Name": "Wired",
+      "Title": "��˿ֱ��",
+      "Area": 785.4,
+      "Value": 1.0,
+      "DC": [
+        {
+          "Name": "Root",
+          "Title": "��������",
+          "Value": 4.6
+        },
+        {
+          "Name": "rDR",
+          "Title": "����Ч��",
+          "Value": 0.96
+        },
+        {
+          "Name": "Fill",
+          "Title": "��亸��",
+          "Value": 12.4
+        },
+        {
+          "Name": "fDR",
+          "Title": "����Ч��",
+          "Value": 0.98
+        }
+      ],
+      "PULSE": [
+        {
+          "Name": "Root",
+          "Title": "��������",
+          "Value": 6.2
+        },
+        {
+          "Name": "rDR",
+          "Title": "����Ч��",
+          "Value": 0.985
+        },
+        {
+          "Name": "Fill",
+          "Title": "��亸��",
+          "Value": 12.6
+        },
+        {
+          "Name": "fDR",
+          "Title": "����Ч��",
+          "Value": 0.995
+        }
+      ]
+    },
+    {
+      "Name": "Wired",
+      "Title": "��˿ֱ��",
+      "Area": 1130.976,
+      "Value": 1.2,
+      "DC": [
+        {
+          "Name": "Root",
+          "Title": "��������",
+          "Value": 2.8
+        },
+        {
+          "Name": "rDR",
+          "Title": "����Ч��",
+          "Value": 0.96
+        },
+        {
+          "Name": "Fill",
+          "Title": "��亸��",
+          "Value": 7.2
+        },
+        {
+          "Name": "fDR",
+          "Title": "����Ч��",
+          "Value": 0.98
+        }
+      ],
+      "PULSE": [
+        {
+          "Name": "Root",
+          "Title": "��������",
+          "Value": 4.4
+        },
+        {
+          "Name": "rDR",
+          "Title": "����Ч��",
+          "Value": 0.985
+        },
+        {
+          "Name": "Fill",
+          "Title": "��亸��",
+          "Value": 8.0
+        },
+        {
+          "Name": "fDR",
+          "Title": "����Ч��",
+          "Value": 0.995
+        }
+      ]
+    },
+    {
+      "Name": "Wired",
+      "Title": "��˿ֱ��",
+      "Area": 3141.593,
+      "Value": 2.0,
+      "DC": [
+        {
+          "Name": "Root",
+          "Title": "��������",
+          "Value": 2.8
+        },
+        {
+          "Name": "rDR",
+          "Title": "����Ч��",
+          "Value": 0.985
+        },
+        {
+          "Name": "Fill",
+          "Title": "��亸��",
+          "Value": 3.2
+        },
+        {
+          "Name": "fDR",
+          "Title": "����Ч��",
+          "Value": 0.985
+        }
+      ]
+    }
+  ]
+}

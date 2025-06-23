@@ -1,0 +1,12 @@
+D:\ImageFeatureAnnotation\WeldFeatureDetection2\YoloSharp\bin\Release\net6.0\IntptrMax.YoloSharp.deps.json
+D:\ImageFeatureAnnotation\WeldFeatureDetection2\YoloSharp\bin\Release\net6.0\IntptrMax.YoloSharp.dll
+D:\ImageFeatureAnnotation\WeldFeatureDetection2\YoloSharp\bin\Release\net6.0\IntptrMax.YoloSharp.pdb
+D:\ImageFeatureAnnotation\WeldFeatureDetection2\YoloSharp\obj\Release\net6.0\YoloSharp.csproj.AssemblyReference.cache
+D:\ImageFeatureAnnotation\WeldFeatureDetection2\YoloSharp\obj\Release\net6.0\YoloSharp.GeneratedMSBuildEditorConfig.editorconfig
+D:\ImageFeatureAnnotation\WeldFeatureDetection2\YoloSharp\obj\Release\net6.0\YoloSharp.AssemblyInfoInputs.cache
+D:\ImageFeatureAnnotation\WeldFeatureDetection2\YoloSharp\obj\Release\net6.0\YoloSharp.AssemblyInfo.cs
+D:\ImageFeatureAnnotation\WeldFeatureDetection2\YoloSharp\obj\Release\net6.0\YoloSharp.csproj.CoreCompileInputs.cache
+D:\ImageFeatureAnnotation\WeldFeatureDetection2\YoloSharp\obj\Release\net6.0\IntptrMax.YoloSharp.dll
+D:\ImageFeatureAnnotation\WeldFeatureDetection2\YoloSharp\obj\Release\net6.0\refint\IntptrMax.YoloSharp.dll
+D:\ImageFeatureAnnotation\WeldFeatureDetection2\YoloSharp\obj\Release\net6.0\IntptrMax.YoloSharp.pdb
+D:\ImageFeatureAnnotation\WeldFeatureDetection2\YoloSharp\obj\Release\net6.0\ref\IntptrMax.YoloSharp.dll

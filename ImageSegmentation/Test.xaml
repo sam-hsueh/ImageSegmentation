@@ -1,0 +1,224 @@
+﻿<UserControl x:Class="ImageSegmentation.Test"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+        xmlns:materialDesignConverters="clr-namespace:MaterialDesignThemes.Wpf.Converters;assembly=MaterialDesignThemes.Wpf"
+        xmlns:local="clr-namespace:ImageSegmentation"
+        xmlns:domain="clr-namespace:ImageSegmentation.Domain"
+        xmlns:Converters="clr-namespace:ImageSegmentation.Converters"
+        xmlns:GDIWpfControl="clr-namespace:GDIWpfControl;assembly=GdiWpfControl"
+             d:DesignHeight="400"
+             d:DesignWidth="1000"
+             mc:Ignorable="d">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Button.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Card.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.CheckBox.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Flipper.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Popupbox.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        <Converters:RadioButtonCheckedConverter x:Key="RadioButtonCheckedConverter" />
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+                <ColumnDefinition Width="3*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid Margin="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="260"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        </Grid.RowDefinitions>
+                <GroupBox
+  Margin="4"
+  Header="图片">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Button Content="选择需预测的图片" FontFamily="Arial Black" Style="{StaticResource MaterialDesignOutlinedButton}" Click="Button_Click" Cursor="Hand"></Button>
+                        <DataGrid Grid.Row="1" VerticalScrollBarVisibility="Visible" Height="180" x:Name="TestFileListGrid"
+  AutoGenerateColumns="False"
+  CanUserAddRows="False"
+  HeadersVisibility="None"
+  ItemsSource="{Binding TestFileList}">
+                            <DataGrid.Columns>
+                                <!-- by default a DataGridCheckBoxColumn will have the MaterialDesignDataGridCheckBoxColumnStyle and MaterialDesignDataGridCheckBoxColumnEditingStyle applied. See DataGridAssist.ApplyMaterialDesignColumnStyles attached property -->
+                                <DataGridCheckBoxColumn Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}">
+                                </DataGridCheckBoxColumn>
+                                <DataGridTemplateColumn
+      Header="Template Column">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate
+          DataType="{x:Type domain:SelectableFiles}">
+                                            <TextBlock
+            FontSize="14"
+            FontStyle="Italic"
+            Text="{Binding FileName}" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </GroupBox>
+                <GroupBox Header="选择模型" Grid.Row="1"
+                                Margin="4"
+  Padding="8"
+  Background="{DynamicResource PrimaryHueLightBrush}"
+  Foreground="{DynamicResource PrimaryHueLightForegroundBrush}" Cursor="">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <RadioButton Margin="6" Grid.Row="0" Content="Yolov8_Float16_Cuda" IsEnabled="{Binding Yolov8_Float16_Cuda,Mode=OneWay}" IsChecked="{Binding Path=MType,Mode=TwoWay,ConverterParameter=0, Converter={StaticResource RadioButtonCheckedConverter}}"></RadioButton>
+                        <RadioButton Margin="6" Grid.Row="0" Content="Yolov8_Float32_Cuda" IsEnabled="{Binding Yolov8_Float32_Cuda,Mode=OneWay}" IsChecked="{Binding Path=MType,Mode=TwoWay,ConverterParameter=1, Converter={StaticResource RadioButtonCheckedConverter}}" Grid.Column="1"></RadioButton>
+                        <RadioButton Margin="6" Grid.Row="1" Content="Yolov11_Float16_Cuda" IsEnabled="{Binding Yolov11_Float16_Cuda,Mode=OneWay}" IsChecked="{Binding Path=MType,Mode=TwoWay,ConverterParameter=2, Converter={StaticResource RadioButtonCheckedConverter}}"></RadioButton>
+                        <RadioButton Margin="6" Grid.Row="1" Content="Yolov11_Float32_Cuda" IsEnabled="{Binding Yolov11_Float32_Cuda,Mode=OneWay}" IsChecked="{Binding Path=MType,Mode=TwoWay,ConverterParameter=3, Converter={StaticResource RadioButtonCheckedConverter}}" Grid.Column="1"></RadioButton>
+                        <RadioButton Margin="6" Grid.Row="2" Content="Yolov8_Float16_Cpu" IsEnabled="{Binding Yolov8_Float16_Cpu,Mode=OneWay}" IsChecked="{Binding Path=MType,Mode=TwoWay,ConverterParameter=4, Converter={StaticResource RadioButtonCheckedConverter}}"></RadioButton>
+                        <RadioButton Margin="6" Grid.Row="2" Content="Yolov8_Float32_Cpu" IsEnabled="{Binding Yolov8_Float32_Cpu,Mode=OneWay}" IsChecked="{Binding Path=MType,Mode=TwoWay,ConverterParameter=5, Converter={StaticResource RadioButtonCheckedConverter}}" Grid.Column="1"></RadioButton>
+                        <RadioButton Margin="6" Grid.Row="3" Content="Yolov11_Float16_Cpu" IsEnabled="{Binding Yolov11_Float16_Cpu,Mode=OneWay}" IsChecked="{Binding Path=MType,Mode=TwoWay,ConverterParameter=6, Converter={StaticResource RadioButtonCheckedConverter}}"></RadioButton>
+                        <RadioButton Margin="6" Grid.Row="3" Content="Yolov11_Float32_Cpu" IsEnabled="{Binding Yolov11_Float32_Cpu,Mode=OneWay}" IsChecked="{Binding Path=MType,Mode=TwoWay,ConverterParameter=7, Converter={StaticResource RadioButtonCheckedConverter}}" Grid.Column="1"></RadioButton>
+                    </Grid>
+                </GroupBox>
+                <GroupBox Grid.Row="2" Header="参数"
+  Margin="4"
+  Padding="8"
+  Background="{DynamicResource PrimaryHueLightBrush}"
+  Foreground="{DynamicResource PrimaryHueLightForegroundBrush}" Cursor="">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <materialDesign:NumericUpDown x:Name="PT" materialDesign:HintAssist.Hint="PredictThreshold" Margin="2,10,2,0"                 
+                Minimum="0.10" ButtonIconDock="LeftAndRight"                                             
+                Maximum="0.8"
+                Interval="0.01"
+                FontSize="14"
+                StringFormat="F2"
+                Grid.Column="0"
+                Grid.Row="0"
+                Value="{Binding PredictThreshold}"
+                HorizontalAlignment="Stretch"
+                Height="50"
+                Style="{StaticResource MaterialDesignOutlinedNumericUpDown}" Cursor="IBeam"
+                />
+                        <materialDesign:NumericUpDown x:Name="IT" materialDesign:HintAssist.Hint="IouThreshold" Margin="2,10,2,0"                 
+Minimum="0.10" ButtonIconDock="LeftAndRight"                                              
+Maximum="0.90"
+Interval="0.01"
+FontSize="14"
+StringFormat="F2"
+Grid.Column="1"
+Grid.Row="0"
+Value="{Binding IouThreshold}"
+HorizontalAlignment="Stretch"
+Height="50"
+Style="{StaticResource MaterialDesignOutlinedNumericUpDown}" Cursor="IBeam"
+/>
+                    </Grid>
+                </GroupBox>
+                <GroupBox Header="预测图片结果" Grid.Row="3" FontFamily="Microsoft Yi Baiti"
+  Margin="4"
+  Padding="8"
+  Background="{DynamicResource PrimaryHueLightBrush}"
+  Foreground="{DynamicResource PrimaryHueLightForegroundBrush}" Cursor="">
+                    <Grid>
+                        <DataGrid Grid.Row="0" Height="150" x:Name="TestResultFileListGrid"
+  AutoGenerateColumns="False"  SelectionChanged="DataGrid_SelectionChanged"  VerticalScrollBarVisibility="Visible"
+  CanUserAddRows="False"
+  HeadersVisibility="None"
+  ItemsSource="{Binding TestResultFileList}">
+                            <DataGrid.Columns>
+                                <!-- by default a DataGridCheckBoxColumn will have the MaterialDesignDataGridCheckBoxColumnStyle and MaterialDesignDataGridCheckBoxColumnEditingStyle applied. See DataGridAssist.ApplyMaterialDesignColumnStyles attached property -->
+                                <!--<DataGridCheckBoxColumn Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}">
+                                </DataGridCheckBoxColumn>-->
+                                <DataGridTemplateColumn
+      Header="Template Column">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate
+          DataType="{x:Type domain:SelectableFiles}">
+                                            <TextBlock
+            FontSize="14"
+            FontStyle="Italic"
+            Text="{Binding FileName}" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </GroupBox>
+
+                <Grid Grid.Row="4" Grid.ColumnSpan="2" Cursor="">
+                    <Button Style="{StaticResource MaterialDesignRaisedDarkButton}" Content="预测" Click="Test_Click"  Cursor="Hand"></Button>
+                </Grid>
+            </Grid>
+            <Grid Grid.Column="1" Cursor="">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid Margin="12 6 12 6">
+                <TextBlock Style="{StaticResource MaterialDesignBodyLargeTextBlock}" x:Name="dir" Height="30" Text="{Binding ProjectDir}"></TextBlock>
+            </Grid>
+            <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Expander x:Name="window"
+    ExpandDirection="Right">
+                        <Expander.Header>
+                            <TextBlock
+        RenderTransformOrigin=".5,.5"
+        Text="窗口">
+                                <TextBlock.LayoutTransform>
+                                    <RotateTransform
+            Angle="90" />
+                                </TextBlock.LayoutTransform>
+                            </TextBlock>
+                        </Expander.Header>
+                        <StackPanel
+      Margin="8,24,16,24"
+      Orientation="Vertical"
+      TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
+                            <RichTextBox  x:Name="richtextBox2" VerticalAlignment="Top" Margin="2" BorderBrush="AliceBlue" Width="100" VerticalScrollBarVisibility="Auto" BorderThickness="1" IsReadOnly="True">
+                                <FlowDocument>
+                                    <Paragraph>
+                                        <Run Text="{Binding Text}"/>
+                                    </Paragraph>
+                                </FlowDocument>
+                            </RichTextBox>
+                        </StackPanel>
+                    </Expander>
+                    <!--<Border BorderThickness="1 1 1 1" BorderBrush="{DynamicResource PrimaryHueDarkBrush}">
+                                    <Grid Grid.Row="1">-->
+                    <GDIWpfControl:GDIControlWPF SizeChanged="GWpf2_SizeChanged" Grid.Column="1" x:Name="GWpf2">
+
+                    </GDIWpfControl:GDIControlWPF>
+                    <!--</Grid>
+                                </Border>-->
+                </Grid>
+            </Grid>
+        </Grid>
+</UserControl>

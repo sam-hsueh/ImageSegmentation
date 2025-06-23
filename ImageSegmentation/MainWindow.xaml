@@ -1,0 +1,86 @@
+﻿<Window x:Class="ImageSegmentation.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+        xmlns:local="clr-namespace:ImageSegmentation"
+        xmlns:domain="clr-namespace:ImageSegmentation.Domain"
+        mc:Ignorable="d"
+        Title="新疆大学智能制造现代产业学院" Height="450" Width="800"
+Style="{StaticResource MaterialDesignWindow}" 
+    Icon="/XJULogob.ico"
+    WindowState="Maximized" Cursor="Hand">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Button.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Shadows.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.ToggleButton.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <materialDesign:DialogHost
+        Identifier="RootDialog"
+        DialogTheme="Inherit">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <materialDesign:ColorZone
+  Mode="PrimaryDark"
+  Padding="6"
+  materialDesign:ShadowAssist.ShadowAnimationDuration="0:0:0.5" DockPanel.Dock="Top"
+  ClipToBounds="False">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition Width="2*"></ColumnDefinition>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <DockPanel Width="600">
+                        <StackPanel Orientation="Horizontal">
+                            <ContentControl Content="{materialDesign:PackIcon DotsVertical, Size=24}" VerticalAlignment="Center"></ContentControl>
+                            <Grid Width="590">
+                                <ListBox x:Name="MenuItemsListBox"
+Margin="12,0,12,0"
+AutomationProperties.Name="MenuPagesListBox"
+ItemsSource="{Binding MenuItems}"
+Style="{StaticResource MaterialDesign3.NavigationBarListBox}" SelectionChanged="MenuItemsListBox_SelectionChanged"
+SelectedIndex="{Binding SelectedIndex}"
+SelectedItem="{Binding SelectedItem, UpdateSourceTrigger=PropertyChanged}">
+                                    <ListBox.Resources>
+                                        <DataTemplate DataType="{x:Type domain:MenuItem}">
+                                            <TextBlock Text="{Binding Name}" TextTrimming="CharacterEllipsis" />
+                                        </DataTemplate>
+                                    </ListBox.Resources>
+                                    <ListBox.ItemContainerStyle>
+                                        <Style TargetType="ListBoxItem"  BasedOn="{StaticResource MaterialDesign3.NavigationBarPrimaryListBoxItem}">
+                                            <Setter  Property="Background"   Value="{DynamicResource MaterialDesign.Brush.Primary.Light}" />
+                                            <Setter  Property="Foreground"   Value="#E8DEF8" />
+                                            <!--<Setter Property="materialDesign:NavigationBarAssist.IsTextVisible"  Value="True" />-->
+                                            <Setter Property="materialDesign:NavigationBarAssist.SelectedIcon" Value="{Binding SelectedIcon}" />
+                                            <Setter Property="materialDesign:NavigationBarAssist.UnselectedIcon" Value="{Binding UnselectedIcon}" />
+                                        </Style>
+                                    </ListBox.ItemContainerStyle>
+                                </ListBox>
+                            </Grid>
+                        </StackPanel>
+                    </DockPanel>
+                    <TextBlock Grid.Column="1"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            FontSize="32"
+                            Text="图片分割系统"/>
+              </Grid>
+            </materialDesign:ColorZone>
+            <Grid Grid.Row="1">
+                    <ContentControl Margin="2 2 2 2"
+                              Content="{Binding Content, UpdateSourceTrigger=PropertyChanged, FallbackValue={x:Null}}"
+                              DataContext="{Binding SelectedItem}"/>
+            </Grid>
+            </Grid>
+    </materialDesign:DialogHost>
+</Window>
