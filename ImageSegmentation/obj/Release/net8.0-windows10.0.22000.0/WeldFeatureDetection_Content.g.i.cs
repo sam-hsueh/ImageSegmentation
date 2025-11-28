@@ -8,10 +8,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("pretrainedmodels/f16/yolov11n-seg.bin")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("pretrainedmodels/f16/yolov8n-seg.bin")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("pretrainedmodels/f32/yolov11n-seg.bin")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("pretrainedmodels/f32/yolov8n-seg.bin")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("pretrainedmodels/yolov11n-seg.bin")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("pretrainedmodels/yolov11s-seg.bin")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("pretrainedmodels/yolov8n-seg.bin")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("pretrainedmodels/yolov8s-seg.bin")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("wconfig.json")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("xjulogo.ico")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("xjulogob.ico")]

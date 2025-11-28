@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static SamSharp.Utils.Classes;
 
 namespace ImageSegmentation.Domain
 {
@@ -13,8 +14,9 @@ namespace ImageSegmentation.Domain
         private int? _cat;
         private string? _description;
         private int _shape;
-        private List<Point> _fpoints;
-
+        private List<Point> _fpoints;//特征点
+        private List<SamPoint> _cpoints;//sam点
+        private byte[] _mask;
         public bool IsSelected
         {
             get => _isSelected;
@@ -44,5 +46,16 @@ namespace ImageSegmentation.Domain
             get => _fpoints;
             set => SetProperty(ref _fpoints, value);
         }
+        public List<SamPoint> CPoints
+        {
+            get => _cpoints;
+            set => SetProperty(ref _cpoints, value);
+        }
+        public byte[] Mask
+        {
+            get => _mask;
+            set => SetProperty(ref _mask, value);
+        }
+
     }
 }

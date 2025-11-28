@@ -1,6 +1,4 @@
-﻿using ImageSegmentation.Domain;
-using MaterialDesignColors;
-using NumpyDotNet;
+﻿using OpenCvSharp;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,16 +9,20 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
+using ImageSegmentation.Domain;
+using static SamSharp.Utils.Classes;
 using Color = System.Drawing.Color;
 using ColorConverter = System.Windows.Media.ColorConverter;
 using ColorW = System.Windows.Media.Color;
+using MessageBox = System.Windows.Forms.MessageBox;
 using Pen = System.Drawing.Pen;
 using Point = System.Drawing.Point;
-
+using Window = System.Windows.Window;
 namespace ImageSegmentation
 {
     /// <summary>
@@ -31,25 +33,45 @@ namespace ImageSegmentation
         MainWindowViewModel? mwv;
         string curDir = "";
         Bitmap sourceBitmap, OrignalBitmap;
-        //float[] original;
-
+        private string modelPath;
+        private SamSharp.Utils.SamPredictor predictor;
         bool MousePress = false;
         Pen gPen = new Pen(Color.Maroon, 1);
         Pen rPen = new Pen(Color.Red, 2);
         public Home()
         {
             InitializeComponent();
+            LoadModel();
             Loaded += Home_Loaded;
-            try
-            {
-                if (Properties.Settings.Default.w != 0)
-                    RWidth.Value = Properties.Settings.Default.w;
-                if (Properties.Settings.Default.h != 0)
-                    RHeight.Value = Properties.Settings.Default.h;
-            }
-            catch { }            
             curDir = Properties.Settings.Default.InitDir;
             MaxF = Properties.Settings.Default.MaxF;
+        }
+        public void LoadModel()
+        {
+            if (Properties.Settings.Default.ModelIndex == 0)
+                modelPath = AppDomain.CurrentDomain.BaseDirectory + @"\SamModels\mobile_sam.pt";
+            else
+            modelPath = AppDomain.CurrentDomain.BaseDirectory + @"\SamMpdels\sam_vit_b_01ec64.pth";
+            var samscalarType = "BFloat16";
+            if (Properties.Settings.Default.ScalarIndex == 0)
+                samscalarType = "BFloat16";
+            else
+                samscalarType = "Float32";
+
+            SamDevice device = (SamDevice)Enum.Parse(typeof(SamDevice), "CUDA");  // SamDevice.Cuda or SamDevice.CPU
+            SamScalarType dtype = (SamScalarType)Enum.Parse(typeof(SamScalarType), samscalarType); // Float, Half or BF16.
+            try
+            {
+                if (predictor == null)
+                {
+                    predictor = new SamSharp.Utils.SamPredictor(modelPath, device, dtype);
+                    //MessageBox.Show("Model Loaded Done.");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
         Color GetAlphaColor(Color color,int alpha)
         {
@@ -79,12 +101,6 @@ namespace ImageSegmentation
 
         private void Home_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
         {
-            //Properties.Settings.Default.IsSaveDir = (bool)SaveD.IsChecked;
-            Properties.Settings.Default.w = (int)RWidth.Value;
-            Properties.Settings.Default.h = (int)RHeight.Value;
-            //Properties.Settings.Default.AutoSave = (bool)IsAutoSave.IsChecked;
-            //Properties.Settings.Default.Save2Txt = (bool)TXT.IsChecked;
-            //Properties.Settings.Default.IsSketchImg = (bool)SketchImg.IsChecked;
             Properties.Settings.Default.Save();
             GC.Collect();
             System.Windows.Application.Current.Shutdown();
@@ -94,23 +110,6 @@ namespace ImageSegmentation
 
         public static ColorW[]? colors { get; set; } = new ColorW[] { (ColorW)ColorConverter.ConvertFromString("#FF3F51B5"), (ColorW)ColorConverter.ConvertFromString("#FF3A7E00"), (ColorW)ColorConverter.ConvertFromString("#FFB00020") };
 
-        private void BRect_Checked(object sender, RoutedEventArgs e)
-        {
-            if (BRect.IsChecked == true)
-            {
-                RectPanel.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                RectPanel.Visibility = Visibility.Hidden;
-                if (BPolygon.IsChecked == true && SelectedF >= 0)
-                {
-                    if (mwv!.FeatureList[SelectedF].Shape == 0)
-                        SelectedF = -1;
-                    DrawF();
-                }
-            }
-        }
         public static ObservableCollection<SelectableFiles> FileList
         {
             set;
@@ -200,10 +199,6 @@ namespace ImageSegmentation
                 Bitmap bm = new Bitmap(displayBitmap);
                 using (Graphics g = Graphics.FromImage(bm))
                 {
-                    // Graphics g = bufferedGraphics.Graphics;
-                    //Graphics g = Graphics.FromHwnd(GWpf.Handle);
-                    //Bitmap bmp = new Bitmap(GWpf.Image, GWpf.Width, GWpf.Height);
-                    //Graphics g = Graphics.FromImage(bmp);
                     if (drawPoly && x != 0 && y != 0)
                     {
                         if (curPS.Count == 0)
@@ -242,13 +237,14 @@ namespace ImageSegmentation
                         var s = mwv!.FeatureList[i].FPoints;
                         int cat = (int)mwv!.FeatureList[i].Cat;
                         Color c = PrimaryColor[cat%20];
-                        g.DrawPolygon(new Pen(c, 3), mwv!.FeatureList[i].FPoints.ToArray());
+                        if(mwv!.FeatureList[i].FPoints.Count>2)
+                            g.DrawPolygon(new Pen(c, 3), mwv!.FeatureList[i].FPoints.ToArray());
                         for (int j = 0; j < mwv!.FeatureList[i].FPoints.Count; j++)
                             g.FillRectangle(new SolidBrush(c), new RectangleF(mwv!.FeatureList[i].FPoints[j].X - 4, mwv!.FeatureList[i].FPoints[j].Y - 4, 8, 8));
                         //矩形框中心点
                         if (mwv!.FeatureList[i].Shape == 0)
                             g.FillRectangle(new SolidBrush(c), new RectangleF((mwv!.FeatureList[i].FPoints[0].X + mwv!.FeatureList[i].FPoints[1].X) / 2 - 4, (mwv!.FeatureList[i].FPoints[0].Y + mwv!.FeatureList[i].FPoints[3].Y) / 2 - 4, 8, 8));
-                        if (SelectedF == i)
+                        if (SelectedF == i&& mwv!.FeatureList[SelectedF].FPoints.Count>2)
                         {
                             g.FillPolygon(new SolidBrush(GetAlphaColor(c, 100)), mwv!.FeatureList[SelectedF].FPoints.ToArray());
                         }
@@ -259,16 +255,6 @@ namespace ImageSegmentation
                             if (HoverFP >= 0)
                             {
                                 g.FillRectangle(new SolidBrush(Color.Yellow), new RectangleF(mwv!.FeatureList[HoverF].FPoints[HoverFP].X - 6, mwv!.FeatureList[HoverF].FPoints[HoverFP].Y - 6, 12, 12));
-                                if (mwv!.FeatureList[HoverF].Shape == 0)
-                                {
-                                    BRect.IsChecked = true;
-                                    RWidth.ValueChanged -= RWidth_ValueChanged;
-                                    RHeight.ValueChanged -= RWidth_ValueChanged;
-                                    RWidth.Value = /*Math.Min(RWidth.Maximum,*/ Math.Abs(mwv!.FeatureList[HoverF].FPoints[0].X - mwv!.FeatureList[HoverF].FPoints[2].X)/*)*/;
-                                    RHeight.Value = /*Math.Min(RHeight.Maximum,*/ Math.Abs(mwv!.FeatureList[HoverF].FPoints[0].Y - mwv!.FeatureList[HoverF].FPoints[2].Y)/*)*/;
-                                    RWidth.ValueChanged += RWidth_ValueChanged;
-                                    RHeight.ValueChanged += RWidth_ValueChanged;
-                                }
                             }
                         }
                     }
@@ -299,22 +285,6 @@ namespace ImageSegmentation
             if (sourceBitmap == null || mwv!.FeatureList == null || mwv!.FeatureList.Count == 0 || SelectedF == -1)
                 return;
             var cur = mwv!.FeatureList[SelectedF];
-            if (SelectedF >= 0 && cur.Shape == 0)
-            {
-                var minX = Math.Min(cur.FPoints[0].X, cur.FPoints[2].X);
-                var minY = Math.Min(cur.FPoints[0].Y, cur.FPoints[2].Y);
-                var maxX = Math.Max(cur.FPoints[0].X, cur.FPoints[2].X);
-                var maxY = Math.Max(cur.FPoints[0].Y, cur.FPoints[2].Y);
-                for (int i = 0; i < cur.FPoints.Count; i++)
-                {
-                    Point p = cur.FPoints[i];
-                    if (cur.FPoints[i].X == maxX)
-                        p.X = minX + (int)RWidth.Value;
-                    if (cur.FPoints[i].Y == maxY)
-                        p.Y = minY + (int)RHeight.Value;
-                    cur.FPoints[i] = p;
-                }
-            }
             DrawF();
             DrawMap();
         }
@@ -336,6 +306,8 @@ namespace ImageSegmentation
                     for (int i = 0; i < mwv!.FeatureList.Count; i++)
                     {
                         var s = mwv!.FeatureList[i].FPoints.ToArray();
+                        if (s.Length < 3)
+                            continue;
                         int cv = (i + 1) * 10;
                         var cl = Color.FromArgb(255, cv, cv, cv);
                         g.FillPolygon(new SolidBrush(cl), s);
@@ -444,14 +416,14 @@ namespace ImageSegmentation
                 {
                     int k = FileListGrid.SelectedIndex;
                     FileName = mwv!.FileList[k].FileName;
-                    StreamReader streamReader = new StreamReader(curDir + @"\" + FileName);
+                    string FilePath = curDir + @"\" + FileName;
+                    StreamReader streamReader = new StreamReader(FilePath);
                     OrignalBitmap = (Bitmap)Bitmap.FromStream(streamReader.BaseStream);
                     streamReader.Close();
 
-                    //   OrignalBitmap = System.Drawing.Image.FromFile(curDir + @"\" + FileName) as Bitmap;
+                    var image = Cv2.ImRead(FilePath);
+                    predictor.SetImage(image, 1024);
 
-                    //Bitmap Gray8 = RgbToGrayScale(OrignalBitmap);
-                    //SaveGray8(Gray8);
                     int width = (int)GWpf.Width;
                     int height = (int)GWpf.Height;
                     if (width < 0)
@@ -470,10 +442,6 @@ namespace ImageSegmentation
                         graphic.DrawImage(OrignalBitmap, new Rectangle(0, 0, width, height));
                         graphic.Dispose();
                     }
-                    //else
-                    //{
-                    //    sourceBitmap = OrignalBitmap;
-                    //}
                     displayBitmap = BitmapAdjust(sourceBitmap, (float)Brightness.Value / 100f, (float)(Contrast.Value) / 100f);
                     richtextBox1.Document.Blocks.Clear();
                     richtextBox1.AppendText("原图：" + OrignalBitmap.Width + " X " + OrignalBitmap.Height + " X " + System.Drawing.Image.GetPixelFormatSize(OrignalBitmap.PixelFormat) / 8);
@@ -536,7 +504,7 @@ namespace ImageSegmentation
                                     mwv!.FeatureList.Add(new SelectableFeature() { FPoints = ps.ToList(), Shape = 1, Cat = cat, Description = "Polygon" });
                                 }
                             }
-                            FeaturesList.SelectedIndex = 0;
+                     //       FeaturesList.SelectedIndex = 0;
                         }
                     }
                     DrawF();
@@ -544,8 +512,6 @@ namespace ImageSegmentation
                 }
                 catch(Exception ex )
                 {
-                    //if (FileListGrid.SelectedIndex < FileListGrid.Items.Count - 1)
-                    //    FileListGrid.SelectedIndex++;
                 }
             }
         }
@@ -583,11 +549,6 @@ namespace ImageSegmentation
                     textWriter.Write(sb.ToString());
                 }
                 mwv!.FileList[FileListGrid.SelectedIndex].IsSelected = true;
-
-                //using (StreamWriter outputFile = new StreamWriter(Path.Combine(docPath, "WriteLines.txt")))
-                //{
-                //        outputFile.Write(sb.ToString());
-                //}
             }
         }
         public string ImageToBase64(string imgpath)
@@ -671,19 +632,6 @@ namespace ImageSegmentation
 
         private void FeaturesList_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //if (mwv!.FeatureList.Count > 0 && FeaturesList.SelectedItems.Count > 0)
-            //{
-            //    SelectedF = FeaturesList.SelectedIndices[0];
-            //    if (mwv!.FeatureList[SelectedF].Shape == 0)
-            //        BRect.IsChecked = true;
-            //    else
-            //        BPolygon.IsChecked = true;
-            //}
-            //else
-            //{
-            //    SelectedF = -1;
-            //}
-            //DrawF();
         }
 
         private void Form_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
@@ -710,72 +658,125 @@ namespace ImageSegmentation
             }
         }
         int MaxF = Properties.Settings.Default.MaxF;
+        private List<SamPoint> samPoints = new List<SamPoint>();
         private void GWpf_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             if (sourceBitmap == null || e.Button == MouseButtons.Right)
                 return;
-            int w = (int)RWidth.Value / 2, h = (int)RHeight.Value / 2;
-            if (BRect.IsChecked == true && (e.X < w / 2 + 8 || e.Y < h / 2 + 8 || e.X + w / 2 > sourceBitmap.Width - 8 || e.Y + h / 2 > sourceBitmap.Height - 8))
-                return;
-
             if (e.X >= 5 && e.X < sourceBitmap.Width - 5 && e.Y >= 5 && e.Y < sourceBitmap.Height - 5)
             {
                 if (HoverF >= 0)
                 {
                     SelectedF = HoverF;
-                    //FeaturesList.SelectedIndices.Clear();
-                    //FeaturesList.Items[HoverF].Selected = true;
-                }
-
-                if (BRect.IsChecked == false && HoverF < 0)
-                {
-                    if (curPS == null || curPS.Count == 0)
-                    {
-                        curPS = new List<Point>();
-                        curPS.Add(new Point((int)e.X, (int)e.Y));
-                        drawPoly = true;
-                    }
-                    else
-                    {
-                        if (close && mwv!.FeatureList.Count < MaxF)
-                        {
-                            mwv!.FeatureList.Add(new SelectableFeature() { FPoints = curPS, Shape = 1, Cat = 2, Description = "Polygon" });
-                            DrawMap();
-                            closed = true;
-                        }
-                        else
-                            curPS.Add(new Point((int)e.X, (int)e.Y));
-                    }
                 }
                 else
                 {
-                    if (HoverF == -1)
+                    if (SAMPolygon.IsChecked == true)
                     {
-                        if (mwv!.FeatureList.Count < MaxF)
+                        samPoints.Clear();
+                        int rr = e.X;
+                        int sr = e.Location.X;
+                        SamPoint point = new SamPoint((int)(e.X*wratio), (int)(e.Y*hratio), true); // Assuming true for foreground
+                        samPoints.Add(point);
+
+                        List<PredictOutput> outputs = predictor.Predict(samPoints);
+                        Thread.Sleep(100);
+                        PredictOutput output = outputs[0];
+
+                        bool[,] mask = output.Mask;
+                        int length = OrignalBitmap.Height * OrignalBitmap.Width; // or src.Height * src.Step;
+                        byte[] mask1 = new byte[length];
+                        Buffer.BlockCopy(mask, 0, mask1, 0, length);
+                        var ms = CheckMaskCrossAndMerge(ref mask1);                        
+                        var src = new Mat(OrignalBitmap.Width, OrignalBitmap.Height, MatType.CV_8UC1);
+                        Marshal.Copy(mask1, 0, src.Data, length);
+                        OpenCvSharp.Point[][] contours;
+                        Cv2.FindContours(
+                            image: src,
+                            contours: out contours,
+                            hierarchy: out HierarchyIndex[] outputArray,
+                            mode: (RetrievalModes)RetrievalModes.External,
+                            method: (ContourApproximationModes)ContourApproximationModes.ApproxSimple
+                            );
+                        List<OpenCvSharp.Point[]> query = contours.ToList<OpenCvSharp.Point[]>().OrderByDescending(t => Cv2.ContourArea(t)).Select(t => t).Take(1).ToList();
+                        if (query.Count == 0)
+                            return;
+                        var epsilon = Cv2.ArcLength(query[0], true) * 0.004;
+                        var approxContour = Cv2.ApproxPolyDP(query[0], epsilon, true);
+                        curPS = new List<Point>();
+                        for (int j = 0; j < approxContour.Length; j++)
                         {
-                            var ps = new Point[] { new Point((int)e.X - w, (int)e.Y - h), new Point((int)e.X + w, (int)e.Y - h), new Point((int)e.X + w, (int)e.Y + h), new Point((int)e.X - w, (int)e.Y + h) };
-                            mwv!.FeatureList.Add(new SelectableFeature() { FPoints = ps.ToList(), Shape = 0, Cat = mwv!.FeatureList.Count, Description = "Rectangle" });
-                            FeaturesList.SelectedIndex = mwv!.FeatureList.Count - 1;
-                            DrawMap();
-                            DrawF();
+                            curPS.Add(new Point((int)(approxContour[j].Y/wratio), (int)(approxContour[j].X/hratio)));
+                        }
+                        var nps =new Point[curPS.Count];
+                        curPS.CopyTo(nps);
+                        List<SamPoint> sp = new List<SamPoint>();
+                        for (int i = 0; i < samPoints.Count; i++)
+                        {
+                            sp.Add(new SamPoint(samPoints[i].X, samPoints[i].Y, true));
+                        }
+                        if(ms==null)
+                            mwv!.FeatureList.Add(new SelectableFeature() { FPoints = nps.ToList(), Shape = 1, Cat = 2, CPoints = sp, Mask = mask1, Description = "Polygon" });
+                        else
+                        {
+                            int index = ms.Min();
+                            ms = ms.OrderByDescending(t => t).ToList();
+                            for (int i = 0; i < ms.Count; i++)
+                            {
+                                if (index != ms[i])
+                                    mwv!.FeatureList.RemoveAt(ms[i]);
+                            }
+                            mwv!.FeatureList[index].FPoints = nps.ToList();
+                            mwv!.FeatureList[index].Mask = mask1;
+                            SelectedF = index;
+                        }
+                        DrawMap();
+                        DrawF();
+                        curPS.Clear();
+                    }
+                }
+
+                    if (SAMPolygon.IsChecked == false/*&&BRect.IsChecked == false */&& BPolygon.IsChecked == true && HoverF < 0)
+                    {
+                        if (curPS == null || curPS.Count == 0)
+                        {
+                            curPS = new List<Point>();
+                            curPS.Add(new Point((int)e.X, (int)e.Y));
+                            drawPoly = true;
+                        }
+                        else
+                        {
+                            if (close && mwv!.FeatureList.Count < MaxF)
+                            {
+                                mwv!.FeatureList.Add(new SelectableFeature() { FPoints = curPS, Shape = 1, Cat = 2, Description = "Polygon" });
+                                DrawMap();
+                                closed = true;
+                            }
+                            else
+                                curPS.Add(new Point((int)e.X, (int)e.Y));
                         }
                     }
                     else
                     {
-                        if (SelectedF >= 0)
+                        if (HoverF == -1)
                         {
-                            mousePx = (int)e.X;
-                            mousePy = (int)e.Y;
-                            MousePress = true;
-                            FeaturesList.SelectedIndex = SelectedF;
+                        }
+                        else
+                        {
+                            if (SelectedF >= 0)
+                            {
+                                mousePx = (int)e.X;
+                                mousePy = (int)e.Y;
+                                MousePress = true;
+                                FeaturesList.SelectedIndex = SelectedF;
+                            }
                         }
                     }
-                }
             }
         }
         private void GWpf_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            if (sourceBitmap == null || BRect.IsChecked == true && (e.X < 5 + RWidth.Value / 2 && e.X >= sourceBitmap.Width - 5 - RWidth.Value / 2 && e.Y < 5 + RHeight.Value / 2 && e.Y >= sourceBitmap.Height - 5 - RHeight.Value / 2) || BRect.IsChecked == false && (e.X < 5 && e.X >= sourceBitmap.Width - 5 && e.Y < 5 && e.Y >= sourceBitmap.Height - 5))
+            if (sourceBitmap == null || /*BRect.IsChecked == true && (e.X < 5 + RWidth.Value / 2 && e.X >= sourceBitmap.Width - 5 - RWidth.Value / 2 && e.Y < 5 + RHeight.Value / 2 && e.Y >= sourceBitmap.Height - 5 - RHeight.Value / 2) ||BRect.IsChecked == false &&*/ (e.X < 5 && e.X >= sourceBitmap.Width - 5 && e.Y < 5 && e.Y >= sourceBitmap.Height - 5))
                 return;
             if (drawPoly)
             {
@@ -785,7 +786,7 @@ namespace ImageSegmentation
             {
                 if (MousePress && (e.Button == MouseButtons.Left/*||e.Button==MouseButtons.Right*/))
                 {
-                    if (SelectedF >= 0 && HoverFP < 0)
+                    if (SelectedF >= 0 && HoverFP < 0&& SelectedF< mwv!.FeatureList.Count)
                     {
                         GWpf.Cursor = System.Windows.Input.Cursors.SizeAll;
                         var curF = mwv!.FeatureList[SelectedF];
@@ -956,7 +957,6 @@ namespace ImageSegmentation
             if (displayBitmap == null)
                 return;
             displayBitmap = BitmapAdjust(sourceBitmap, (float)Brightness.Value / 100f, (float)(Contrast.Value) / 100f);
-            //DrawToGraphics(displayBitmap);
             DrawF();
         }
 
@@ -978,10 +978,7 @@ namespace ImageSegmentation
             if (mwv!.FeatureList.Count > 0 && FeaturesList.SelectedItems.Count > 0)
             {
                 SelectedF = FeaturesList.SelectedIndex;
-                if (mwv!.FeatureList[SelectedF].Shape == 0)
-                    BRect.IsChecked = true;
-                else
-                    BPolygon.IsChecked = true;
+                BPolygon.IsChecked = true;
             }
             else
             {
@@ -1010,9 +1007,22 @@ namespace ImageSegmentation
             {
                 if (HoverF >= 0)
                 {
-                    if (mwv!.FeatureList != null && mwv!.FeatureList.Count > 0)
+                    if (mwv!.FeatureList != null && mwv!.FeatureList.Count > 0&& HoverF< mwv!.FeatureList.Count)
                     {
                         mwv!.FeatureList.RemoveAt(HoverF);
+                        DrawF();
+                        DrawMap();
+                    }
+                }
+            }
+            else if (e == 3)
+            {
+                if (HoverF >= 0&& HoverFP>=0)
+                {
+                    if(mwv!.FeatureList != null && mwv!.FeatureList[HoverF]!=null&& mwv!.FeatureList[HoverF].FPoints.Count>3 && mwv!.FeatureList[HoverF].FPoints[HoverFP]!=null)
+                    {
+                        mwv!.FeatureList[HoverF].FPoints.RemoveAt(HoverFP);
+                        HoverFP = -1;
                         DrawF();
                         DrawMap();
                     }
@@ -1021,7 +1031,44 @@ namespace ImageSegmentation
         }
 
         int mousePx = -1, mousePy = -1;
-
+        
+        List<int> CheckMaskCrossAndMerge(ref byte[] Mask)
+        {
+            List<int> ms = new List<int>();
+            byte[] mask = (byte[])Mask.Clone();
+            for (int i = 0; i < mwv!.FeatureList.Count; i++)
+            {
+                if (mwv!.FeatureList[i].Mask!=null)
+                {
+                    for (int j = 0; j < mask.Length; j++) 
+                    {
+                        if (mask[j]==1&& mwv!.FeatureList[i].Mask[j]==1)
+                        {
+                            ms.Add(i); break;
+                        }
+                    }
+                }
+            }
+            if (ms.Count == 0)
+                return null;
+            for (int i = 0; i < mask.Length; i++)
+            {
+                byte b = mask[i];
+                if (b == 1)
+                    continue;
+                for (int j = 0; j < ms.Count; j++)
+                {
+                    if (mwv!.FeatureList[ms[j]].Mask[i] > 0)
+                    {
+                        b = 1;
+                        break;
+                    }
+                }
+                mask[i] = b;
+            }
+            Mask = mask;
+            return ms;
+        }
         private void ContextMenuFPoints_Click(object sender, RoutedEventArgs e)
         {
             if (curPS != null && curPS.Count > 0)

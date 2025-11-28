@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
 using ImageSegmentation.Domain;
+using YoloSharp.Types;
 
 namespace ImageSegmentation.Converters
 {
@@ -17,7 +18,7 @@ namespace ImageSegmentation.Converters
             {
                 v = (int)value;
             }
-            else if (t == typeof(DeviceType)) 
+            else if (t == typeof(YoloSize)) 
             {
                 v = (int)value;
             }

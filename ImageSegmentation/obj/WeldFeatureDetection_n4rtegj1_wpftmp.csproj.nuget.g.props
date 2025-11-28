@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <RestoreSuccess Condition=" '$(RestoreSuccess)' == '' ">True</RestoreSuccess>
+    <RestoreTool Condition=" '$(RestoreTool)' == '' ">NuGet</RestoreTool>
+    <ProjectAssetsFile Condition=" '$(ProjectAssetsFile)' == '' ">$(MSBuildThisFileDirectory)project.assets.json</ProjectAssetsFile>
+    <NuGetPackageRoot Condition=" '$(NuGetPackageRoot)' == '' ">$(UserProfile)\.nuget\packages\</NuGetPackageRoot>
+    <NuGetPackageFolders Condition=" '$(NuGetPackageFolders)' == '' ">C:\Users\薛瑞雷\.nuget\packages\;C:\Program Files (x86)\Microsoft Visual Studio\Shared\NuGetPackages</NuGetPackageFolders>
+    <NuGetProjectStyle Condition=" '$(NuGetProjectStyle)' == '' ">PackageReference</NuGetProjectStyle>
+    <NuGetToolVersion Condition=" '$(NuGetToolVersion)' == '' ">6.14.0</NuGetToolVersion>
+  </PropertyGroup>
+  <ItemGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <SourceRoot Include="C:\Users\薛瑞雷\.nuget\packages\" />
+    <SourceRoot Include="C:\Program Files (x86)\Microsoft Visual Studio\Shared\NuGetPackages\" />
+  </ItemGroup>
+  <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <Import Project="$(NuGetPackageRoot)torchsharp\0.105.1\buildTransitive\net6.0\TorchSharp.props" Condition="Exists('$(NuGetPackageRoot)torchsharp\0.105.1\buildTransitive\net6.0\TorchSharp.props')" />
+    <Import Project="$(NuGetPackageRoot)torchvision\0.105.1\buildTransitive\net6.0\TorchVision.props" Condition="Exists('$(NuGetPackageRoot)torchvision\0.105.1\buildTransitive\net6.0\TorchVision.props')" />
+    <Import Project="$(NuGetPackageRoot)opencvsharp4.runtime.win\4.11.0.20250507\build\net5.0\OpenCvSharp4.runtime.win.props" Condition="Exists('$(NuGetPackageRoot)opencvsharp4.runtime.win\4.11.0.20250507\build\net5.0\OpenCvSharp4.runtime.win.props')" />
+    <Import Project="$(NuGetPackageRoot)libtorch-cuda-12.1-win-x64-part9-primary\2.5.1\buildTransitive\netstandard2.0\libtorch-cuda-12.1-win-x64-part9-primary.props" Condition="Exists('$(NuGetPackageRoot)libtorch-cuda-12.1-win-x64-part9-primary\2.5.1\buildTransitive\netstandard2.0\libtorch-cuda-12.1-win-x64-part9-primary.props')" />
+    <Import Project="$(NuGetPackageRoot)libtorch-cuda-12.1-win-x64-part9-fragment2\2.5.1\buildTransitive\netstandard2.0\libtorch-cuda-12.1-win-x64-part9-fragment2.props" Condition="Exists('$(NuGetPackageRoot)libtorch-cuda-12.1-win-x64-part9-fragment2\2.5.1\buildTransitive\netstandard2.0\libtorch-cuda-12.1-win-x64-part9-fragment2.props')" />
+    <Import Project="$(NuGetPackageRoot)libtorch-cuda-12.1-win-x64-part9-fragment1\2.5.1\buildTransitive\netstandard2.0\libtorch-cuda-12.1-win-x64-part9-fragment1.props" Condition="Exists('$(NuGetPackageRoot)libtorch-cuda-12.1-win-x64-part9-fragment1\2.5.1\buildTransitive\netstandard2.0\libtorch-cuda-12.1-win-x64-part9-fragment1.props')" />
+    <Import Project="$(NuGetPackageRoot)libtorch-cuda-12.1-win-x64-part8\2.5.1\buildTransitive\netstandard2.0\libtorch-cuda-12.1-win-x64-part8.props" Condition="Exists('$(NuGetPackageRoot)libtorch-cuda-12.1-win-x64-part8\2.5.1\buildTransitive\netstandard2.0\libtorch-cuda-12.1-win-x64-part8.props')" />
+    <Import Project="$(NuGetPackageRoot)libtorch-cuda-12.1-win-x64-part7\2.5.1\buildTransitive\netstandard2.0\libtorch-cuda-12.1-win-x64-part7.props" Condition="Exists('$(NuGetPackageRoot)libtorch-cuda-12.1-win-x64-part7\2.5.1\buildTransitive\netstandard2.0\libtorch-cuda-12.1-win-x64-part7.props')" />
+    <Import Project="$(NuGetPackageRoot)libtorch-cuda-12.1-win-x64-part6\2.5.1\buildTransitive\netstandard2.0\libtorch-cuda-12.1-win-x64-part6.props" Condition="Exists('$(NuGetPackageRoot)libtorch-cuda-12.1-win-x64-part6\2.5.1\buildTransitive\netstandard2.0\libtorch-cuda-12.1-win-x64-part6.props')" />
+    <Import Project="$(NuGetPackageRoot)libtorch-cuda-12.1-win-x64-part5-primary\2.5.1\buildTransitive\netstandard2.0\libtorch-cuda-12.1-win-x64-part5-primary.props" Condition="Exists('$(NuGetPackageRoot)libtorch-cuda-12.1-win-x64-part5-primary\2.5.1\buildTransitive\netstandard2.0\libtorch-cuda-12.1-win-x64-part5-primary.props')" />
+    <Import Project="$(NuGetPackageRoot)libtorch-cuda-12.1-win-x64-part5-fragment1\2.5.1\buildTransitive\netstandard2.0\libtorch-cuda-12.1-win-x64-part5-fragment1.props" Condition="Exists('$(NuGetPackageRoot)libtorch-cuda-12.1-win-x64-part5-fragment1\2.5.1\buildTransitive\netstandard2.0\libtorch-cuda-12.1-win-x64-part5-fragment1.props')" />
+    <Import Project="$(NuGetPackageRoot)libtorch-cuda-12.1-win-x64-part4\2.5.1\buildTransitive\netstandard2.0\libtorch-cuda-12.1-win-x64-part4.props" Condition="Exists('$(NuGetPackageRoot)libtorch-cuda-12.1-win-x64-part4\2.5.1\buildTransitive\netstandard2.0\libtorch-cuda-12.1-win-x64-part4.props')" />
+    <Import Project="$(NuGetPackageRoot)libtorch-cuda-12.1-win-x64-part3-primary\2.5.1\buildTransitive\netstandard2.0\libtorch-cuda-12.1-win-x64-part3-primary.props" Condition="Exists('$(NuGetPackageRoot)libtorch-cuda-12.1-win-x64-part3-primary\2.5.1\buildTransitive\netstandard2.0\libtorch-cuda-12.1-win-x64-part3-primary.props')" />
+    <Import Project="$(NuGetPackageRoot)libtorch-cuda-12.1-win-x64-part3-fragment1\2.5.1\buildTransitive\netstandard2.0\libtorch-cuda-12.1-win-x64-part3-fragment1.props" Condition="Exists('$(NuGetPackageRoot)libtorch-cuda-12.1-win-x64-part3-fragment1\2.5.1\buildTransitive\netstandard2.0\libtorch-cuda-12.1-win-x64-part3-fragment1.props')" />
+    <Import Project="$(NuGetPackageRoot)libtorch-cuda-12.1-win-x64-part2\2.5.1\buildTransitive\netstandard2.0\libtorch-cuda-12.1-win-x64-part2.props" Condition="Exists('$(NuGetPackageRoot)libtorch-cuda-12.1-win-x64-part2\2.5.1\buildTransitive\netstandard2.0\libtorch-cuda-12.1-win-x64-part2.props')" />
+    <Import Project="$(NuGetPackageRoot)libtorch-cuda-12.1-win-x64-part1\2.5.1\buildTransitive\netstandard2.0\libtorch-cuda-12.1-win-x64-part1.props" Condition="Exists('$(NuGetPackageRoot)libtorch-cuda-12.1-win-x64-part1\2.5.1\buildTransitive\netstandard2.0\libtorch-cuda-12.1-win-x64-part1.props')" />
+    <Import Project="$(NuGetPackageRoot)libtorch-cuda-12.1-win-x64\2.5.1\buildTransitive\netstandard2.0\libtorch-cuda-12.1-win-x64.props" Condition="Exists('$(NuGetPackageRoot)libtorch-cuda-12.1-win-x64\2.5.1\buildTransitive\netstandard2.0\libtorch-cuda-12.1-win-x64.props')" />
+    <Import Project="$(NuGetPackageRoot)libtorch-cpu-win-x64\2.5.1\buildTransitive\netstandard2.0\libtorch-cpu-win-x64.props" Condition="Exists('$(NuGetPackageRoot)libtorch-cpu-win-x64\2.5.1\buildTransitive\netstandard2.0\libtorch-cpu-win-x64.props')" />
+  </ImportGroup>
+</Project>

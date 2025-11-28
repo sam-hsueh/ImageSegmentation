@@ -76,16 +76,22 @@
   HeadersVisibility="All"
   ItemsSource="{Binding FeatureList}">
                                         <DataGrid.Columns>
-                                            <!--<DataGridCheckBoxColumn Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}">
-                                            </DataGridCheckBoxColumn>-->
-                                            <materialDesign:DataGridComboBoxColumn
-      Width="106"
+                            <!--<DataGridCheckBoxColumn  Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}">
+                                <DataGridCheckBoxColumn.CellStyle>
+                                    <Style TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}">
+                                        <EventSetter Event="CheckBox.Checked" Handler="FeatureOnChecked"/>
+                                        <EventSetter Event="CheckBox.Unchecked" Handler="FeatureOnChecked"/>
+                                    </Style>
+                                </DataGridCheckBoxColumn.CellStyle>
+                            </DataGridCheckBoxColumn>-->
+                            <materialDesign:DataGridComboBoxColumn
+      Width="96"
       Header="特征类别"
       IsEditable="True"
       ItemsSourceBinding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=DataContext.CatFeatures}"                                            
       SelectedValueBinding="{Binding Cat}">
                                             </materialDesign:DataGridComboBoxColumn>
-                                            <DataGridTemplateColumn Width="200"
+                                            <DataGridTemplateColumn Width="160"
       Header="Description">
                                                 <DataGridTemplateColumn.CellTemplate>
                                                     <DataTemplate
@@ -156,20 +162,21 @@
                                         <ColumnDefinition Width="Auto"></ColumnDefinition>
                                         <ColumnDefinition Width="Auto"></ColumnDefinition>
                                     </Grid.ColumnDefinitions>
-                                    <DockPanel x:Name="RectPanel">
+                                    <!--<DockPanel x:Name="RectPanel" Visibility="Hidden" Cursor="">
                                         <materialDesign:NumericUpDown ValueChanged="RWidth_ValueChanged" Margin="10 12 10 12" Width="80" Height="80" Style="{StaticResource MaterialDesignOutlinedNumericUpDown}" x:Name="RWidth" Minimum="10" Maximum="2000" materialDesign:HintAssist.FloatingScale="0.9" materialDesign:HintAssist.Hint="Width" Value="100"></materialDesign:NumericUpDown>
                                 <materialDesign:NumericUpDown ValueChanged="RWidth_ValueChanged"  Margin="10 12 10 12" Width="80" Height="80" Style="{StaticResource MaterialDesignOutlinedNumericUpDown}" x:Name="RHeight" Minimum="10" Maximum="2000" materialDesign:HintAssist.FloatingScale="0.9" materialDesign:HintAssist.Hint="Height" Value="100" Cursor="IBeam"></materialDesign:NumericUpDown>
-                                    </DockPanel>
-                                    <StackPanel Grid.Column="1"  VerticalAlignment="Center">
-                                        <RadioButton Margin="10 12 10 12" Width="100" x:Name="BRect" Checked="BRect_Checked" Unchecked="BRect_Checked" Style="{StaticResource MaterialDesignRadioButton}" Content="Rectangles" IsChecked="True" Cursor="Hand"></RadioButton>
-                                        <RadioButton  Margin="10 12 10 12" Width="100" x:Name="BPolygon" Style="{StaticResource MaterialDesignRadioButton}" Content="Polygon" IsChecked="False" Cursor="Hand"></RadioButton>
+                                    </DockPanel>-->
+                                    <StackPanel Grid.Column="1"  VerticalAlignment="Center" Cursor="Hand">
+                                        <!--<RadioButton Margin="10 4 10 4" Width="100" x:Name="BRect" Checked="BRect_Checked"  Unchecked="BRect_Checked" Style="{StaticResource MaterialDesignRadioButton}" Content="Rectangles" IsChecked="False" Cursor="Hand"></RadioButton>-->
+                        <RadioButton  Margin="10 4 10 4" Width="100" x:Name="BPolygon" Style="{StaticResource MaterialDesignRadioButton}" Content="Polygon" IsChecked="False" Cursor="Hand"></RadioButton>
+                        <RadioButton  Margin="10 4 10 4" Width="100" x:Name="SAMPolygon" Style="{StaticResource MaterialDesignRadioButton}" Content="SAM" Cursor="Hand" IsChecked="True"></RadioButton>
                                     </StackPanel>
-                    <Button Grid.Column="2"  Margin="10 12 10 12" Style="{StaticResource MaterialDesignFlatSecondaryMidBgButton}" Click="MNext_Click"  Height="80" Width="90" Content="下一张" FontFamily="Arial Black" x:Name="MNext"></Button>
+                    <Button Grid.Column="2"  Margin="10 12 10 12" Style="{StaticResource MaterialDesignFlatMidBgButton}" Click="MNext_Click"  Height="80" Width="90" Content="下一张" FontFamily="Arial Black" x:Name="MNext" Cursor="Hand"></Button>
                                     <DockPanel Grid.Column="3" HorizontalAlignment="Left" VerticalAlignment="Center">
                                     <Slider  Margin="10 12 10 12" Width="150" ToolTip="Brightness" ValueChanged="Contrast_ValueChanged" Style="{StaticResource MaterialDesign3.MaterialDesignDiscreteHorizontalSlider}" x:Name="Brightness" Minimum="-50" Maximum="50" Value="-30"></Slider>
                                     <Slider  Margin="10 12 10 12" Width="150" ToolTip="Contrast" ValueChanged="Contrast_ValueChanged" Style="{StaticResource MaterialDesign3.MaterialDesignDiscreteHorizontalSlider}" x:Name="Contrast" Minimum="50" Maximum="150" Value="120" Cursor=""></Slider>
                                     </DockPanel>
-                                    <!--<Button Grid.Column="4" Margin="0 12 10 12" x:Name="MSave" Click="MSave_Click" Visibility="Hidden" Style="{StaticResource MaterialDesignFlatSecondaryMidBgButton}" Height="80" Width="90" Content="手动保存"></Button>-->
+                                    <!--<Button Visibility="Visible" Grid.Column="4" Margin="0 12 10 12" x:Name="Merge" IsEnabled="False" Click="Merge_Click" Style="{StaticResource MaterialDesignFlatSecondaryMidBgButton}" Height="80" Width="90" Content="合并选框" Cursor="Hand"></Button>-->
                                 </Grid>
                             </Border>
                             <Grid Grid.Row="1">

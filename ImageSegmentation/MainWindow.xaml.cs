@@ -146,7 +146,8 @@ namespace ImageSegmentation
         {
             if(mvm!.SelectedIndex==0)
             {
-                home.ctime = 5;
+                if(home!=null)
+                    home.ctime = 5;
             }
         }
         //private void OnSelectedItemChanged(object sender, DependencyPropertyChangedEventArgs e) => MainScrollViewer.ScrollToHome();

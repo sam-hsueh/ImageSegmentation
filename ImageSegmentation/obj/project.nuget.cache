@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "dgSpecHash": "awZXqHuN+Dc=",
+  "success": true,
+  "projectFilePath": "D:\\Github\\repos\\ImageSegmentation\\ImageSegmentation\\ImageSegmentation.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\薛瑞雷\\.nuget\\packages\\opencvsharp4\\4.11.0.20250507\\opencvsharp4.4.11.0.20250507.nupkg.sha512",
+    "C:\\Users\\薛瑞雷\\.nuget\\packages\\opencvsharp4.runtime.win\\4.11.0.20250507\\opencvsharp4.runtime.win.4.11.0.20250507.nupkg.sha512",
+    "C:\\Users\\薛瑞雷\\.nuget\\packages\\skiasharp\\3.119.1\\skiasharp.3.119.1.nupkg.sha512",
+    "C:\\Users\\薛瑞雷\\.nuget\\packages\\skiasharp.nativeassets.win32\\3.119.1\\skiasharp.nativeassets.win32.3.119.1.nupkg.sha512",
+    "C:\\Users\\薛瑞雷\\.nuget\\packages\\microsoft.windows.sdk.net.ref\\10.0.22000.57\\microsoft.windows.sdk.net.ref.10.0.22000.57.nupkg.sha512"
+  ],
+  "logs": []
+}

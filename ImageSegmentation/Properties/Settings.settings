@@ -11,36 +11,6 @@
     <Setting Name="h" Type="System.Single" Scope="User">
       <Value Profile="(Default)">60</Value>
     </Setting>
-    <Setting Name="cle" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">16</Value>
-    </Setting>
-    <Setting Name="l1" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">75</Value>
-    </Setting>
-    <Setting Name="l2" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">840</Value>
-    </Setting>
-    <Setting Name="l3" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">215</Value>
-    </Setting>
-    <Setting Name="l4" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">1340</Value>
-    </Setting>
-    <Setting Name="l5" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">75</Value>
-    </Setting>
-    <Setting Name="l6" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">-113</Value>
-    </Setting>
-    <Setting Name="l0" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">425</Value>
-    </Setting>
-    <Setting Name="l7" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">469.5</Value>
-    </Setting>
-    <Setting Name="OffsetX" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
     <Setting Name="AutoSave" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
@@ -61,6 +31,15 @@
     </Setting>
     <Setting Name="MaxF" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">40</Value>
+    </Setting>
+    <Setting Name="ModelIndex" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="ScalarIndex" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="NumClasses" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">80</Value>
     </Setting>
   </Settings>
 </SettingsFile>

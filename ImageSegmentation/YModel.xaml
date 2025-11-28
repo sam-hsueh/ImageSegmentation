@@ -58,15 +58,15 @@
                             <RadioButton Margin="26 16 0 16" Content="Yolov11" IsChecked="{Binding Path=YType,Mode=TwoWay,ConverterParameter=3, Converter={StaticResource RadioButtonCheckedConverter}}" Grid.Column="1"></RadioButton>
                             </Grid>
                     </GroupBox>
-                    <GroupBox Margin="4" Header="Device Type" Grid.Row="1">
+                    <GroupBox Margin="4" Header="模型规模" Grid.Row="1">
                         <!--<TextBlock FontSize="15"  Background="Goldenrod" Foreground="White"  VerticalAlignment="center" Text="Device Type" Grid.Row="1" Grid.Column="0"></TextBlock>-->
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"></ColumnDefinition>
                                 <ColumnDefinition Width="*"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
-                            <RadioButton Margin="26 16 0 16" Content="CPU" IsChecked="{Binding Path=DType,Mode=TwoWay,ConverterParameter=0, Converter={StaticResource RadioButtonCheckedConverter}}"></RadioButton>
-                            <RadioButton Margin="26 16 0 16" Content="CUDA" IsChecked="{Binding Path=DType,Mode=TwoWay,ConverterParameter=1, Converter={StaticResource RadioButtonCheckedConverter}}" Grid.Column="1"></RadioButton>
+                        <RadioButton Margin="26 16 0 16" Content="n" IsChecked="{Binding Path=YSize,Mode=TwoWay,ConverterParameter=0, Converter={StaticResource RadioButtonCheckedConverter}}"></RadioButton>
+                        <RadioButton Margin="26 16 0 16" Content="s" IsChecked="{Binding Path=YSize,Mode=TwoWay,ConverterParameter=1, Converter={StaticResource RadioButtonCheckedConverter}}" Grid.Column="1"></RadioButton>
                         </Grid>
                     </GroupBox>
                     <GroupBox Margin="4" Header="Scalar Type" Grid.Row="2">
@@ -104,21 +104,10 @@
                 Height="50"
                 Style="{StaticResource MaterialDesignOutlinedNumericUpDown}" Cursor="IBeam"
                 />
-                        <materialDesign:NumericUpDown x:Name="SC" materialDesign:HintAssist.Hint="SortCount"  Margin="2,2,2,0"
-                Minimum="10"
-                Maximum="100"
-                Interval="5"
-                FontSize="14"
-                StringFormat="F0"
-                Value="{Binding SortCount}"
-                Grid.Column="1"
-                HorizontalAlignment="Stretch"
-                Height="50"
-                Style="{StaticResource MaterialDesignOutlinedNumericUpDown}" Cursor="IBeam" ButtonIconDock="LeftAndRight"
-                />
+                        
                         <materialDesign:NumericUpDown x:Name="Ep" materialDesign:HintAssist.Hint="Epochs"   Margin="2,10,2,0"
                 Minimum="10"  ButtonIconDock="LeftAndRight"
-                Maximum="200"
+                Maximum="2000"
                 Interval="5"
                 FontSize="14"
                 StringFormat="F0"
@@ -126,8 +115,8 @@
                 HorizontalAlignment="Stretch"
                 Height="50"
                 Style="{StaticResource MaterialDesignOutlinedNumericUpDown}"
-                                                  Grid.Row="1"
-                                                  Grid.Column="0" Cursor="IBeam"
+                                                  Grid.Row="0"
+                                                  Grid.Column="1" Cursor="IBeam"
                 />
                         
                     </Grid>

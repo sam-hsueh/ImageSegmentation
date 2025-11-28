@@ -1,0 +1,75 @@
+﻿<UserControl x:Class="ImageSegmentation.Settings"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:materialDesign="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+        xmlns:local="clr-namespace:ImageSegmentation"
+        xmlns:Converters="clr-namespace:ImageSegmentation.Converters"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="1280">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign2.Defaults.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/Generic.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Button.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.CheckBox.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.TextBox.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.ScrollViewer.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.ComboBox.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.NumericUpDown.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        <Converters:IntToBoolConverter x:Key="IntToBoolConverter" />
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <GroupBox Margin="6 6 6 6" Header="模型名称" FontSize="16"  materialDesign:ShadowAssist.ShadowAnimationDuration="0:0:0.5" Style="{StaticResource MaterialDesignGroupBox }">
+            <Grid>
+                <StackPanel>
+                    <RadioButton  Margin="10 4 10 4" Width="200" x:Name="mm" Style="{StaticResource MaterialDesignRadioButton}" Content="Mobile_Sam.pt"  Cursor="Hand" 
+                                  IsChecked="{Binding Path=ModelIndex,Mode=TwoWay,ConverterParameter=0, Converter={StaticResource IntToBoolConverter}}"></RadioButton>
+                    <RadioButton  Margin="10 4 10 4" Width="200" x:Name="sm" Style="{StaticResource MaterialDesignRadioButton}" Content="Sam_vit_b_01ec64.pth" Cursor="Hand" 
+                                  IsChecked="{Binding Path=ModelIndex,Mode=TwoWay,ConverterParameter=1, Converter={StaticResource IntToBoolConverter}}"></RadioButton>
+                </StackPanel>
+            </Grid>
+                </GroupBox>
+        <GroupBox Margin="6 6 6 6" Header="模型SacalarType" FontSize="16" Grid.Column="1" materialDesign:ShadowAssist.ShadowAnimationDuration="0:0:0.5" Style="{StaticResource MaterialDesignGroupBox }">
+            <Grid>
+                <StackPanel>
+                    <RadioButton  Margin="10 4 10 4" Width="200" x:Name="bf16" Style="{StaticResource MaterialDesignRadioButton}" Content="Float16" Cursor="Hand" 
+                                  IsChecked="{Binding Path=ScalarIndex,Mode=TwoWay,ConverterParameter=0, Converter={StaticResource IntToBoolConverter}}"></RadioButton>
+                    <RadioButton  Margin="10 4 10 4" Width="200" x:Name="f32" Style="{StaticResource MaterialDesignRadioButton}" Content="Float32" Cursor="Hand" 
+                                  IsChecked="{Binding Path=ScalarIndex,Mode=TwoWay,ConverterParameter=1, Converter={StaticResource IntToBoolConverter}}"></RadioButton>
+                </StackPanel>
+            </Grid>
+        </GroupBox>
+        <materialDesign:NumericUpDown x:Name="SC" materialDesign:HintAssist.Hint="NumClasses"  Margin="2,2,2,0"
+Minimum="10"
+Maximum="100"
+Interval="5"
+FontSize="14"
+Width="120"
+StringFormat="F0"
+Value="{Binding Source={x:Static local:Properties.Settings.Default}, Path=NumClasses}"
+Grid.Row="1"
+Grid.Column="0"
+HorizontalAlignment="Stretch"
+Height="50"
+Style="{StaticResource MaterialDesignOutlinedNumericUpDown}" Cursor="IBeam" ButtonIconDock="LeftAndRight"
+/>
+        <Button Grid.Row="2" ToolTip="保存" Grid.ColumnSpan="2" HorizontalAlignment="Center" Command="{Binding SaveSettingCommand}"
+  Style="{StaticResource MaterialDesignRaisedDarkButton}"
+  Width="200" Height="50"
+  Content="保存" />
+            </Grid>
+</UserControl>

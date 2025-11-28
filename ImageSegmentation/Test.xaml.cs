@@ -1,6 +1,4 @@
-﻿using ImageSegmentation.Domain;
-using MaterialDesignColors;
-using NumpyDotNet;
+﻿using OpenCvSharp;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,30 +7,14 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Forms;
-using System.Windows.Input;
+using TorchSharp.Modules;
+using ImageSegmentation.Domain;
+using YoloSharp.Models;
+using YoloSharp.Types;
 using Color = System.Drawing.Color;
-using ColorConverter = System.Windows.Media.ColorConverter;
-using ColorW = System.Windows.Media.Color;
-using Pen = System.Drawing.Pen;
-using Point = System.Drawing.Point;
-using Utilities;
-using System.Threading.Tasks;
-using YoloSharp;
-using System.Reflection.Metadata;
-using System.Windows.Shapes;
-using static System.Net.Mime.MediaTypeNames;
-using System.Windows.Documents;
-using System.Threading;
-using ImageMagick.Drawing;
-using ImageMagick;
-using System.Windows.Media.Media3D;
-using Windows.Devices.Radios;
-using System.Timers;
+using Point = OpenCvSharp.Point;
+using Size = OpenCvSharp.Size;
 
 namespace ImageSegmentation
 {
@@ -51,7 +33,7 @@ namespace ImageSegmentation
 
         private void Test_Loaded(object sender, RoutedEventArgs e)
         {
-            Window? window = Window.GetWindow(this);
+            System.Windows.Window? window =  System.Windows.Window.GetWindow(this);
             mwv = this.DataContext as MainWindowViewModel;
             mwv!.testW = this;
             var timer = new System.Windows.Forms.Timer();
@@ -190,41 +172,6 @@ namespace ImageSegmentation
             else
                 return;
         }
-        static void Convert8BitTo24BitJpg(string inputPath, string outputPath)
-        {
-            using (Bitmap original = new Bitmap(inputPath))
-            {
-                // 创建一个24位的新Bitmap
-                Bitmap newImage = new Bitmap(original.Width, original.Height, PixelFormat.Format24bppRgb);
-
-                try
-                {
-                    // 设置DPI与原始图像一致
-                    newImage.SetResolution(original.HorizontalResolution, original.VerticalResolution);
-
-                    // 绘制图像到新的Bitmap上
-                    using (Graphics g = Graphics.FromImage(newImage))
-                    {
-                        g.Clear(Color.White);
-                        g.DrawImage(original, 0, 0, original.Width, original.Height);
-                    }
-
-                    // 设置JPG保存质量（0-100，数值越大质量越高）
-                    ImageCodecInfo jpgCodec = GetEncoderInfo("image/jpeg");
-                    EncoderParameters encoderParameters = new EncoderParameters(1);
-                    encoderParameters.Param[0] = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, 90L);
-
-                    // 保存为24位JPG
-                    newImage.Save(outputPath, jpgCodec, encoderParameters);
-                }
-                finally
-                {
-                    // 确保资源被释放
-                    newImage.Dispose();
-                }
-            }
-        }
-
         static ImageCodecInfo GetEncoderInfo(string mimeType)
         {
             ImageCodecInfo[] codecs = ImageCodecInfo.GetImageEncoders();
@@ -236,8 +183,13 @@ namespace ImageSegmentation
             return null;
         }
         string predictResultImagePath = "";
+        private YoloTask yoloTask;
+        Random rand = new Random(1024);
         private void Test_Click(object sender, RoutedEventArgs e)
         {
+            string predictImagePath = mwv!.ProjectDir + @"\TestImages\";
+            if (Directory.GetFiles(predictImagePath).Length == 0)
+                return;
             Action<string> func = (string s) =>
             {
                 richtextBox2.Dispatcher.Invoke(() =>
@@ -246,7 +198,6 @@ namespace ImageSegmentation
                     richtextBox2.ScrollToEnd();
                 }, System.Windows.Threading.DispatcherPriority.Background);
             };
-            string predictImagePath = mwv!.ProjectDir + @"\TestImages\";
             predictResultImagePath = predictImagePath + @"\Result\";
             if (!Directory.Exists(predictResultImagePath))
                 Directory.CreateDirectory(predictResultImagePath);
@@ -261,83 +212,129 @@ namespace ImageSegmentation
             ////Create segmenter
             if (Directory.GetFiles(predictImagePath) == null || Directory.GetFiles(predictImagePath).Length == 0||!File.Exists(ModelName))
                 return;
-            window.IsExpanded = true;
+            //window.IsExpanded = true;
             richtextBox2.Document.Blocks.Clear();
-            Segmenter segmenter;
-            if (mwv!.MType == ModelType.Yolov8_Float16_Cuda)
+            int numClasses = Properties.Settings.Default.NumClasses;
+            if (mwv!.MType == ModelType.Yolov8_Float16_n)
             {
-                segmenter = new Segmenter(mwv!.SortCount, yoloType: YoloType.Yolov8, deviceType: DeviceType.CUDA, yoloSize: YoloSize.n, dtype: ScalarType.Float16);
+                yoloTask = new YoloTask(TaskType.Segmentation, numClasses, yoloType: YoloType.Yolov8, deviceType:  DeviceType.CUDA, yoloSize:  YoloSize.n, dtype:  ScalarType.Float16);
             }
-            else if (mwv!.MType == ModelType.Yolov8_Float32_Cuda)
+            else if (mwv!.MType == ModelType.Yolov8_Float32_n)
             {
-                segmenter = new Segmenter(mwv!.SortCount, yoloType: YoloType.Yolov8, deviceType: DeviceType.CUDA, yoloSize: YoloSize.n, dtype: ScalarType.Float32);
+                yoloTask = new YoloTask(TaskType.Segmentation, numClasses, yoloType: YoloType.Yolov8, deviceType: DeviceType.CUDA, yoloSize: YoloSize.n, dtype: ScalarType.Float32);
             }
-            else if (mwv!.MType == ModelType.Yolov11_Float16_Cuda)
+            else if (mwv!.MType == ModelType.Yolov11_Float16_n)
             {
-                segmenter = new Segmenter(mwv!.SortCount, yoloType: YoloType.Yolov11, deviceType: DeviceType.CUDA, yoloSize: YoloSize.n, dtype: ScalarType.Float16);
+                yoloTask = new YoloTask(TaskType.Segmentation, numClasses, yoloType: YoloType.Yolov11, deviceType: DeviceType.CUDA, yoloSize: YoloSize.n, dtype: ScalarType.Float16);
             }
-            else if (mwv!.MType == ModelType.Yolov11_Float32_Cuda)
+            else if (mwv!.MType == ModelType.Yolov11_Float32_n)
             {
-                segmenter = new Segmenter(mwv!.SortCount, yoloType: YoloType.Yolov11, deviceType: DeviceType.CUDA, yoloSize: YoloSize.n, dtype: ScalarType.Float32);
+                yoloTask = new YoloTask(TaskType.Segmentation, numClasses, yoloType: YoloType.Yolov11, deviceType: DeviceType.CUDA, yoloSize: YoloSize.n, dtype: ScalarType.Float32);
             }
-            else if (mwv!.MType == ModelType.Yolov8_Float16_Cpu)
+            else if (mwv!.MType == ModelType.Yolov8_Float16_s)
             {
-                segmenter = new Segmenter(mwv!.SortCount, yoloType: YoloType.Yolov8, deviceType: DeviceType.CPU, yoloSize: YoloSize.n, dtype: ScalarType.Float16);
+                yoloTask = new YoloTask(TaskType.Segmentation, numClasses, yoloType: YoloType.Yolov8, deviceType: DeviceType.CUDA, yoloSize: YoloSize.s, dtype: ScalarType.Float16);
             }
-            else if (mwv!.MType == ModelType.Yolov8_Float32_Cpu)
+            else if (mwv!.MType == ModelType.Yolov8_Float32_s)
             {
-                segmenter = new Segmenter(mwv!.SortCount, yoloType: YoloType.Yolov8, deviceType: DeviceType.CPU, yoloSize: YoloSize.n, dtype: ScalarType.Float32);
+                yoloTask = new YoloTask(TaskType.Segmentation, numClasses, yoloType: YoloType.Yolov8, deviceType: DeviceType.CUDA, yoloSize: YoloSize.s, dtype: ScalarType.Float32);
             }
-            else if (mwv!.MType == ModelType.Yolov11_Float16_Cpu)
+            else if (mwv!.MType == ModelType.Yolov11_Float16_s)
             {
-                segmenter = new Segmenter(mwv!.SortCount, yoloType: YoloType.Yolov11, deviceType: DeviceType.CPU, yoloSize: YoloSize.n, dtype: ScalarType.Float16);
+                yoloTask = new YoloTask(TaskType.Segmentation, numClasses, yoloType: YoloType.Yolov11, deviceType: DeviceType.CUDA, yoloSize: YoloSize.s, dtype: ScalarType.Float16);
             }
             else
             {
-                segmenter = new Segmenter(mwv!.SortCount, yoloType: YoloType.Yolov11, deviceType: DeviceType.CPU, yoloSize: YoloSize.n, dtype: ScalarType.Float32);
+                yoloTask = new YoloTask(TaskType.Segmentation, numClasses, yoloType: YoloType.Yolov11, deviceType: DeviceType.CUDA, yoloSize: YoloSize.s, dtype: ScalarType.Float32);
             }
-            segmenter.LoadModel(ModelName);
-
-            // ImagePredict image
-
-
+            yoloTask.LoadModel(ModelName, func, skipNcNotEqualLayers: true);
+            func("\n");
             foreach (string Path in Directory.GetFiles(predictImagePath))
             {
-                string PathExt = new FileInfo(Path).Extension.ToLower();
+                var fi = new FileInfo(Path);
+                string PathExt = fi.Extension.ToLower();
                 if (PathExt == ".png" || PathExt == ".jpg") //Json格式?
                 {
                     long start = DateTime.Now.Ticks;
-                    MagickImage predictImage = new MagickImage(Path);
-                    var (predictResult, resultImage) = segmenter.ImagePredict(predictImage, null, mwv!.PredictThreshold, mwv!.IouThreshold);
+                    Mat predictImage = Cv2.ImRead(Path);
 
-                    if (predictResult.Count > 0)
-                    {
-                        var drawables = new Drawables()
-                            .StrokeColor(MagickColors.Red)
-                            .StrokeWidth(1)
-                            .FillColor(MagickColors.Transparent)
-                            .Font("Consolas")
-                            .FontPointSize(16)
-                            .TextAlignment(ImageMagick.TextAlignment.Left);
-
-                        foreach (var result in predictResult)
-                        {
-                            drawables.Rectangle(result.X, result.Y, result.X + result.W, result.Y + result.H);
-                            string label = string.Format("Sort:{0}, Score:{1:F1}%", result.ClassID, result.Score * 100);
-                            drawables.Text(result.X, result.Y - 12, label);
-                            func(label + "\n");
-                        }
-                        resultImage.Draw(drawables);
-                        string Name = new FileInfo(Path).Name;
-                        resultImage.Write(predictResultImagePath + Name);
-                    }
+                    List<YoloResult> predictResult = yoloTask.ImagePredict(predictImage, mwv!.PredictThreshold, mwv!.IouThreshold);
+                    if (predictResult == null)
+                        return;
                     long end = DateTime.Now.Ticks;
+                    func(string.Format("文件:{0}\n", fi.Name));
+
+                    //foreach (YoloResult result in predictResult)
+                    for (int i=0;i<predictResult.Count;i++)
+                    {
+                        YoloResult result = predictResult[i];
+                        float[] cxcywhr = new float[] { result.CenterX, result.CenterY, result.Width, result.Height, result.Radian };
+                        float[] points = cxcywhr2xyxyxyxy(cxcywhr);
+
+                        Point[] pts = new Point[4]
+                        {
+                    new Point(points[0], points[1]),
+                    new Point(points[2], points[3]),
+                    new Point(points[4], points[5]),
+                    new Point(points[6], points[7]),
+                        };
+                        Cv2.Polylines(predictImage, new Point[][] { pts }, true, Scalar.Red, 2);
+                        string label = string.Format("{0}:{1:F1}%", (i+1), result.Score * 100);
+
+                        Size textSize = Cv2.GetTextSize(label, HersheyFonts.HersheySimplex, 0.5, 1, out int baseline);
+                        int x = 0, y = 14;
+                        if (result.Y - baseline > 14)
+                            y = result.Y - baseline;
+                        if (result.X > 0)
+                            x = result.X;
+
+                        // Draw mask
+                        if (result.Mask is not null)
+                        {
+                            Mat maskMat = Mat.FromArray<byte>(result.Mask);
+                            maskMat = maskMat * 255;
+                            //   maskMat = maskMat.Transpose();
+
+                            // Create random color
+                            int R = rand.Next(0, 255);
+                            int G = rand.Next(0, 255);
+                            int B = rand.Next(0, 255);
+                            Scalar color = new Scalar(R, G, B, 200);
+                            Mat backColor = new Mat(maskMat.Rows, maskMat.Cols, MatType.CV_8UC3, color);
+                            Cv2.Add(predictImage, backColor, predictImage, maskMat);
+
+                            OpenCvSharp.Point[][] contours;
+                            Cv2.FindContours(
+                                image: maskMat,
+                                contours: out contours,
+                                hierarchy: out HierarchyIndex[] outputArray,
+                                mode: (RetrievalModes)RetrievalModes.External,
+                                method: (ContourApproximationModes)ContourApproximationModes.ApproxSimple
+                                );
+                            List<OpenCvSharp.Point[]> query = contours.ToList<OpenCvSharp.Point[]>().OrderByDescending(t => Cv2.ContourArea(t)).Select(t => t).Take(1).ToList();
+                            if (query.Count == 0)
+                                return;
+                            var epsilon = Cv2.ArcLength(query[0], true) * 0.003;
+                            var approxContour = Cv2.ApproxPolyDP(query[0], epsilon, true);
+                            var curPS = new List<OpenCvSharp.Point>();
+                            for (int k = 0; k < approxContour.Length; k++)
+                            {
+                                var p = new OpenCvSharp.Point((double)(approxContour[k].X), (double)(approxContour[k].Y));
+                                curPS.Add(p);
+                                Cv2.Circle(predictImage, p, 3, Scalar.GreenYellow, 1);
+                            }
+                            Cv2.DrawContours(predictImage, new OpenCvSharp.Point[][] { curPS.ToArray() }, -1, Scalar.YellowGreen, 1);
+                        }
+                        Cv2.Rectangle(predictImage, new OpenCvSharp.Rect(new Point(x, y - textSize.Height), new Size(textSize.Width, textSize.Height + baseline)), Scalar.White, Cv2.FILLED);
+                        Cv2.PutText(predictImage, label, new Point(x, y), HersheyFonts.HersheySimplex, 0.5, Scalar.Black, 1);
+                        func(string.Format("  Index :{0}\n     Score:{1:F1}%\n     CenterX:{2}\n     CenterY:{3}\n     Width:{4}\n     Height:{5}\n     R:{6:F3}\n", (i+1), result.Score * 100, result.CenterX, result.CenterY, result.Width, result.Height, result.Radian));
+                    }
+                    string Name = new FileInfo(Path).Name;
+                    predictImage.SaveImage(predictResultImagePath + Name);
                     long span = (end - start) / TimeSpan.TicksPerMillisecond;
-                    func(span.ToString());
-                    func("\n");
+                    func("用时："+span.ToString() + " ms\n\n");
                 }
             }
-            func("\n");
             func("ImagePredict done");
             try
             {
@@ -471,6 +468,30 @@ namespace ImageSegmentation
             TempBmp.UnlockBits(TempBmpData);  // 解锁内存区域  
             bmp.UnlockBits(bitmapData);
             return TempBmp;
+        }
+
+        private static float[] cxcywhr2xyxyxyxy(float[] x)
+        {
+            float cx = x[0];
+            float cy = x[1];
+            float w = x[2];
+            float h = x[3];
+            float r = x[4];
+            float cosR = (float)Math.Cos(r);
+            float sinR = (float)Math.Sin(r);
+            float wHalf = w / 2;
+            float hHalf = h / 2;
+            return new float[]
+            {
+                cx - wHalf * cosR + hHalf * sinR,
+                cy - wHalf * sinR - hHalf * cosR,
+                cx + wHalf * cosR + hHalf * sinR,
+                cy + wHalf * sinR - hHalf * cosR,
+                cx + wHalf * cosR - hHalf * sinR,
+                cy + wHalf * sinR + hHalf * cosR,
+                cx - wHalf * cosR - hHalf * sinR,
+                cy - wHalf * sinR + hHalf * cosR,
+            };
         }
     }
 }

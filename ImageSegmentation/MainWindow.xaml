@@ -73,7 +73,7 @@ SelectedItem="{Binding SelectedItem, UpdateSourceTrigger=PropertyChanged}">
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             FontSize="32"
-                            Text="图片分割系统"/>
+                            Text="图像特征检测系统"/>
               </Grid>
             </materialDesign:ColorZone>
             <Grid Grid.Row="1">

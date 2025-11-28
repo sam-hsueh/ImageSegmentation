@@ -61,126 +61,6 @@ namespace ImageSegmentation.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("16")]
-        public double cle {
-            get {
-                return ((double)(this["cle"]));
-            }
-            set {
-                this["cle"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("75")]
-        public double l1 {
-            get {
-                return ((double)(this["l1"]));
-            }
-            set {
-                this["l1"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("840")]
-        public double l2 {
-            get {
-                return ((double)(this["l2"]));
-            }
-            set {
-                this["l2"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("215")]
-        public double l3 {
-            get {
-                return ((double)(this["l3"]));
-            }
-            set {
-                this["l3"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1340")]
-        public double l4 {
-            get {
-                return ((double)(this["l4"]));
-            }
-            set {
-                this["l4"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("75")]
-        public double l5 {
-            get {
-                return ((double)(this["l5"]));
-            }
-            set {
-                this["l5"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("-113")]
-        public double l6 {
-            get {
-                return ((double)(this["l6"]));
-            }
-            set {
-                this["l6"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("425")]
-        public double l0 {
-            get {
-                return ((double)(this["l0"]));
-            }
-            set {
-                this["l0"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("469.5")]
-        public double l7 {
-            get {
-                return ((double)(this["l7"]));
-            }
-            set {
-                this["l7"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public double OffsetX {
-            get {
-                return ((double)(this["OffsetX"]));
-            }
-            set {
-                this["OffsetX"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool AutoSave {
             get {
@@ -261,6 +141,42 @@ namespace ImageSegmentation.Properties {
             }
             set {
                 this["MaxF"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int ModelIndex {
+            get {
+                return ((int)(this["ModelIndex"]));
+            }
+            set {
+                this["ModelIndex"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int ScalarIndex {
+            get {
+                return ((int)(this["ScalarIndex"]));
+            }
+            set {
+                this["ScalarIndex"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("80")]
+        public int NumClasses {
+            get {
+                return ((int)(this["NumClasses"]));
+            }
+            set {
+                this["NumClasses"] = value;
             }
         }
     }

@@ -12,16 +12,14 @@ namespace ImageSegmentation.Converters
         {
             int v = 0;
             int.TryParse(value.ToString(), out v);
-            return v == 0 ? false : true;
+            int w = 0;
+            int.TryParse(parameter.ToString(), out w);
+            return v == w ? true : false;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            bool rev = System.Convert.ToBoolean(value);
-            if (rev == true)
-                return 1;
-            else
-                return 0;
+            return value.Equals(true) ? parameter : Binding.DoNothing;
         }
     }
 }

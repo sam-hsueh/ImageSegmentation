@@ -1,10 +1,10 @@
 ﻿using MaterialDesignThemes.Wpf;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Windows.Data;
+using YoloSharp.Types;
 
 namespace ImageSegmentation.Domain
 {
@@ -25,6 +25,11 @@ namespace ImageSegmentation.Domain
             get;
         }
         public Test? testW
+        {
+            set;
+            get;
+        }
+        public Settings? setW
         {
             set;
             get;
@@ -54,13 +59,22 @@ namespace ImageSegmentation.Domain
                     PackIconKind.LetterTBoxOutline,
                     PackIconKind.LetterTBox,
                     this
+                ),
+                new MenuItem(
+                    "Settings",
+                    typeof(Settings),
+                    PackIconKind.Settings,
+                    PackIconKind.SettingsOutline,
+                    this
                 )
             });
             WIN = System.Windows.Application.Current.MainWindow as MainWindow;
             HomeCommand = new AnotherCommandImplementation(_ => { SelectedItem = MenuItems[0]; });
             YModelCommand = new AnotherCommandImplementation(_ => { SelectedItem = MenuItems[1]; });
             TestCommand = new AnotherCommandImplementation(_ => { SelectedItem = MenuItems[2]; });
+            SettingsCommand = new AnotherCommandImplementation(_ => { SelectedItem = MenuItems[3]; });
             TrainCommand = new AnotherCommandImplementation(Train);
+            SaveSettingCommand = new AnotherCommandImplementation(_ => { SaveSetting(); });
             SelectedItem = MenuItems[SelectedIndex];
             _menuItemsView = CollectionViewSource.GetDefaultView(MenuItems);
             FeatureList = new ObservableCollection<SelectableFeature>();
@@ -70,25 +84,39 @@ namespace ImageSegmentation.Domain
             t2.Start();
 
         }
+        public static int ModelIndex
+        {  get; set; }=Properties.Settings.Default.ModelIndex;
+        public static int ScalarIndex
+        { get; set; } = Properties.Settings.Default.ScalarIndex;
+
+        private void SaveSetting()
+        {
+            Properties.Settings.Default.ModelIndex = ModelIndex;
+            Properties.Settings.Default.ScalarIndex = ScalarIndex;
+            Properties.Settings.Default.Save();
+            mainW!.LoadModel();
+            DialogsViewModel.ShowSaveSucsseceDiag.Execute(null);
+            SelectedIndex = 0;
+        }
 
         private void CheckModelExits(object? sender, EventArgs e)
         {
             string M = ProjectDir + @"\Models\" + Enum.GetValues(typeof(ModelType)).GetValue(0).ToString() + "_best.bin";
-            Yolov8_Float16_Cuda= File.Exists(M);
+            Yolov8_Float16_n= File.Exists(M);
             M = ProjectDir + @"\Models\" + Enum.GetValues(typeof(ModelType)).GetValue(1).ToString() + "_best.bin";
-            Yolov8_Float32_Cuda = File.Exists(M);
+            Yolov8_Float32_n = File.Exists(M);
             M = ProjectDir + @"\Models\" + Enum.GetValues(typeof(ModelType)).GetValue(2).ToString() + "_best.bin";
-            Yolov11_Float16_Cuda = File.Exists(M);
+            Yolov11_Float16_n = File.Exists(M);
             M = ProjectDir + @"\Models\" + Enum.GetValues(typeof(ModelType)).GetValue(3).ToString() + "_best.bin";
-            Yolov11_Float32_Cuda = File.Exists(M);
+            Yolov11_Float32_n = File.Exists(M);
             M = ProjectDir + @"\Models\" + Enum.GetValues(typeof(ModelType)).GetValue(4).ToString() + "_best.bin";
-            Yolov8_Float16_Cpu = File.Exists(M);
+            Yolov8_Float16_s = File.Exists(M);
             M = ProjectDir + @"\Models\" + Enum.GetValues(typeof(ModelType)).GetValue(5).ToString() + "_best.bin";
-            Yolov8_Float32_Cpu = File.Exists(M);
+            Yolov8_Float32_s = File.Exists(M);
             M = ProjectDir + @"\Models\" + Enum.GetValues(typeof(ModelType)).GetValue(6).ToString() + "_best.bin";
-            Yolov11_Float16_Cpu = File.Exists(M);
+            Yolov11_Float16_s = File.Exists(M);
             M = ProjectDir + @"\Models\" + Enum.GetValues(typeof(ModelType)).GetValue(7).ToString() + "_best.bin";
-            Yolov11_Float32_Cpu = File.Exists(M);
+            Yolov11_Float32_s = File.Exists(M);
         }
 
         private void Train(object? obj)
@@ -99,47 +127,26 @@ namespace ImageSegmentation.Domain
             string preTrainedModelPath = AppDomain.CurrentDomain.BaseDirectory + @"\PreTrainedModels\";
             if (YType == YoloType.Yolov8)
             {
-                if (SType == ScalarType.Float16)
-                {
-                    preTrainedModelPath += @"F16\yolov8n-seg.bin";
-                }
+                if (YSize == YoloSize.n)
+                    preTrainedModelPath += @"yolov8n-seg.bin";
+
                 else
-                {
-                    preTrainedModelPath += @"F32\yolov8n-seg.bin";
-                }
+                    preTrainedModelPath += @"yolov8s-seg.bin";
             }
             else
             {
-                if (SType == ScalarType.Float16)
-                {
-                    preTrainedModelPath += @"F16\yolov11n-seg.bin";
-                }
+                if (YSize == YoloSize.n)
+                    preTrainedModelPath += @"yolov11n-seg.bin";
+
                 else
-                {
-                    preTrainedModelPath += @"F32\yolov11n-seg.bin";
-                }
+                    preTrainedModelPath += @"yolov11s-seg.bin";
             }
-            //int batchSize = 16;
-            //int sortCount = 80;
-            //int epochs = 100;
-            //float predictThreshold = 0.25f;
-            //float iouThreshold = 0.7f;
-
-            ////YoloType yoloType = YoloType.Yolov11;
-            //DeviceType deviceType = DeviceType.CUDA;
-            ////ScalarType dtype = ScalarType.Float32;
-            //YoloSize yoloSize = YoloSize.n;
-
-            ////Task.Factory.StartNew(()=>
-            ////{
-            //    //Create segmenter
-            //    Segmenter segmenter = new Segmenter(SortCount, yoloType: YType, deviceType: DType, yoloSize: yoloSize, dtype: SType);
-            //    segmenter.LoadModel(preTrainedModelPath, skipNcNotEqualLayers: true);
-
-            //    // Train model
-            //    segmenter.Train(trainDataPath, valDataPath, outputPath: outputPath, batchSize: BatchSize, epochs: Epochs, useMosaic: false);
-            ////});
         }
+        //public static int numberClass
+        //{
+        //    set;get;
+        //} = 80;
+
 
         public ObservableCollection<MenuItem> MenuItems { get; }
         public ObservableCollection<MenuItem> MainMenuItems { get; }
@@ -170,8 +177,6 @@ namespace ImageSegmentation.Domain
 
         public AnotherCommandImplementation HomeCommand { get; }
         public AnotherCommandImplementation YModelCommand { get; }
-        //public AnotherCommandImplementation DoCamCommand { get; }
-        //public AnotherCommandImplementation WeldingCommand { get; }
         public AnotherCommandImplementation TestCommand { get; }
         public AnotherCommandImplementation SettingsCommand { get; }
         public AnotherCommandImplementation SaveSettingCommand { get; }
@@ -181,7 +186,6 @@ namespace ImageSegmentation.Domain
         public AnotherCommandImplementation? SingularRoboCommand { get; }
         public AnotherCommandImplementation? ResetRoboCommand { get; }
         public AnotherCommandImplementation? OriginalRoboCommand { get; }
-        //public AnotherCommandImplementation? SimuCommand { get; }
         public AnotherCommandImplementation? StartCommand { get; }
         public AnotherCommandImplementation? ReStartCommand { get; }
         public AnotherCommandImplementation? NextCommand { get; }
@@ -259,12 +263,12 @@ namespace ImageSegmentation.Domain
             get => _BatchSize;
         }
 
-        int _SortCount = 80;
-        public int SortCount
-        {
-            set => SetProperty(ref _SortCount, value);
-            get => _SortCount;
-        }
+        //int _SortCount = 40;
+        //public int SortCount
+        //{
+        //    set => SetProperty(ref _SortCount, value);
+        //    get => _SortCount;
+        //}
         int _Epochs = 100;
         public int Epochs
         {
@@ -284,91 +288,111 @@ namespace ImageSegmentation.Domain
             set => SetProperty(ref _IouThreshold, value);
             get => _IouThreshold;
         }
-        YoloType _YType = YoloType.Yolov11;
+        YoloType _YType = YoloType.Yolov8;
         public YoloType YType
         {
             set => SetProperty(ref _YType, value);
             get => _YType;
         }
 
-        DeviceType _DType = DeviceType.CPU;
-        public DeviceType DType
+        //DeviceType _DType = DeviceType.CPU;
+        //public DeviceType DType
+        //{
+        //    set => SetProperty(ref _DType, value);
+        //    get => _DType;
+        //}
+        YoloSize _YSize = YoloSize.n;
+        public YoloSize YSize
         {
-            set => SetProperty(ref _DType, value);
-            get => _DType;
+            set => SetProperty(ref _YSize, value);
+            get => _YSize;
         }
 
-        ScalarType _SType = ScalarType.Float32;
+        ScalarType _SType = ScalarType.Float16;
         public ScalarType SType
         {
             set => SetProperty(ref _SType, value);
             get => _SType;
         }
-        ModelType _MType = ModelType.Yolov8_Float16_Cuda;
+        ModelType _MType = ModelType.Yolov8_Float16_n;
         public ModelType MType
         {
             set => SetProperty(ref _MType, value);
             get => _MType;
         }
-        bool _Yolov8_Float16_Cuda = false;
-        public bool Yolov8_Float16_Cuda
+        bool _Yolov8_Float16_s = false;
+        public bool Yolov8_Float16_s
         {
-            set => SetProperty(ref _Yolov8_Float16_Cuda, value);
-            get => _Yolov8_Float16_Cuda;
+            set => SetProperty(ref _Yolov8_Float16_s, value);
+            get => _Yolov8_Float16_s;
         }
-        bool _Yolov8_Float32_Cuda = false;
-        public bool Yolov8_Float32_Cuda
+        bool _Yolov8_Float32_s = false;
+        public bool Yolov8_Float32_s
         {
-            set => SetProperty(ref _Yolov8_Float32_Cuda, value);
-            get => _Yolov8_Float32_Cuda;
+            set => SetProperty(ref _Yolov8_Float32_s, value);
+            get => _Yolov8_Float32_s;
         }
-        bool _Yolov11_Float16_Cuda = false;
-        public bool Yolov11_Float16_Cuda
+        bool _Yolov11_Float16_s = false;
+        public bool Yolov11_Float16_s
         {
-            set => SetProperty(ref _Yolov11_Float16_Cuda, value);
-            get => _Yolov11_Float16_Cuda;
+            set => SetProperty(ref _Yolov11_Float16_s, value);
+            get => _Yolov11_Float16_s;
         }
-        bool _Yolov11_Float32_Cuda = false;
-        public bool Yolov11_Float32_Cuda
+        bool _Yolov11_Float32_s = false;
+        public bool Yolov11_Float32_s
         {
-            set => SetProperty(ref _Yolov11_Float32_Cuda, value);
-            get => _Yolov11_Float32_Cuda;
+            set => SetProperty(ref _Yolov11_Float32_s, value);
+            get => _Yolov11_Float32_s;
         }
-        bool _Yolov8_Float16_Cpu = false;
-        public bool Yolov8_Float16_Cpu
+        bool _Yolov8_Float16_n = false;
+        public bool Yolov8_Float16_n
         {
-            set => SetProperty(ref _Yolov8_Float16_Cpu, value);
-            get => _Yolov8_Float16_Cpu;
+            set => SetProperty(ref _Yolov8_Float16_n, value);
+            get => _Yolov8_Float16_n;
         }
-        bool _Yolov8_Float32_Cpu = false;
-        public bool Yolov8_Float32_Cpu
+        bool _Yolov8_Float32_n = false;
+        public bool Yolov8_Float32_n
         {
-            set => SetProperty(ref _Yolov8_Float32_Cpu, value);
-            get => _Yolov8_Float32_Cpu;
+            set => SetProperty(ref _Yolov8_Float32_n, value);
+            get => _Yolov8_Float32_n;
         }
-        bool _Yolov11_Float16_Cpu = false;
-        public bool Yolov11_Float16_Cpu
+        bool _Yolov11_Float16_n = false;
+        public bool Yolov11_Float16_n
         {
-            set => SetProperty(ref _Yolov11_Float16_Cpu, value);
-            get => _Yolov11_Float16_Cpu;
+            set => SetProperty(ref _Yolov11_Float16_n, value);
+            get => _Yolov11_Float16_n;
         }
-        bool _Yolov11_Float32_Cpu = false;
-        public bool Yolov11_Float32_Cpu
+        bool _Yolov11_Float32_n = false;
+        public bool Yolov11_Float32_n
         {
-            set => SetProperty(ref _Yolov11_Float32_Cpu, value);
-            get => _Yolov11_Float32_Cpu;
+            set => SetProperty(ref _Yolov11_Float32_n, value);
+            get => _Yolov11_Float32_n;
         }
     }
     public enum ModelType
     {
-        Yolov8_Float16_Cuda = 0,
-        Yolov8_Float32_Cuda = 1,
-        Yolov11_Float16_Cuda = 2,
-        Yolov11_Float32_Cuda = 3,
-        Yolov8_Float16_Cpu = 4,
-        Yolov8_Float32_Cpu = 5,
-        Yolov11_Float16_Cpu = 6,
-        Yolov11_Float32_Cpu = 7,
-
+        Yolov8_Float16_n = 0,
+        Yolov8_Float32_n = 1,
+        Yolov11_Float16_n = 2,
+        Yolov11_Float32_n = 3,
+        Yolov8_Float16_s = 4,
+        Yolov8_Float32_s = 5,
+        Yolov11_Float16_s = 6,
+        Yolov11_Float32_s = 7,
+        //Yolov8_Float16_m = 8,
+        //Yolov8_Float32_m = 9,
+        //Yolov11_Float16_m = 10,
+        //Yolov11_Float32_m = 11,
+    }
+    public enum SAMModelType
+    {
+        MobileSam,
+        Sam
+    }
+    public enum SAMScalarType
+    {
+        Float16,
+        BFloat16,
+        Float32
     }
 }

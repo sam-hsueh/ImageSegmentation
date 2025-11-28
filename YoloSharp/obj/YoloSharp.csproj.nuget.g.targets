@@ -1,8 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
-<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
-    <Import Project="$(NuGetPackageRoot)torchsharp\0.105.0\buildTransitive\net6.0\TorchSharp.targets" Condition="Exists('$(NuGetPackageRoot)torchsharp\0.105.0\buildTransitive\net6.0\TorchSharp.targets')" />
-    <Import Project="$(NuGetPackageRoot)torchvision\0.105.0\buildTransitive\net6.0\TorchVision.targets" Condition="Exists('$(NuGetPackageRoot)torchvision\0.105.0\buildTransitive\net6.0\TorchVision.targets')" />
-    <Import Project="$(NuGetPackageRoot)magick.net-q8-anycpu\14.6.0\buildTransitive\netstandard20\Magick.NET-Q8-AnyCPU.targets" Condition="Exists('$(NuGetPackageRoot)magick.net-q8-anycpu\14.6.0\buildTransitive\netstandard20\Magick.NET-Q8-AnyCPU.targets')" />
-  </ImportGroup>
-</Project>

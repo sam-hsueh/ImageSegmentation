@@ -89,14 +89,14 @@
                             <RowDefinition Height="*"></RowDefinition>
                             <RowDefinition Height="*"></RowDefinition>
                         </Grid.RowDefinitions>
-                        <RadioButton Margin="6" Grid.Row="0" Content="Yolov8_Float16_Cuda" IsEnabled="{Binding Yolov8_Float16_Cuda,Mode=OneWay}" IsChecked="{Binding Path=MType,Mode=TwoWay,ConverterParameter=0, Converter={StaticResource RadioButtonCheckedConverter}}"></RadioButton>
-                        <RadioButton Margin="6" Grid.Row="0" Content="Yolov8_Float32_Cuda" IsEnabled="{Binding Yolov8_Float32_Cuda,Mode=OneWay}" IsChecked="{Binding Path=MType,Mode=TwoWay,ConverterParameter=1, Converter={StaticResource RadioButtonCheckedConverter}}" Grid.Column="1"></RadioButton>
-                        <RadioButton Margin="6" Grid.Row="1" Content="Yolov11_Float16_Cuda" IsEnabled="{Binding Yolov11_Float16_Cuda,Mode=OneWay}" IsChecked="{Binding Path=MType,Mode=TwoWay,ConverterParameter=2, Converter={StaticResource RadioButtonCheckedConverter}}"></RadioButton>
-                        <RadioButton Margin="6" Grid.Row="1" Content="Yolov11_Float32_Cuda" IsEnabled="{Binding Yolov11_Float32_Cuda,Mode=OneWay}" IsChecked="{Binding Path=MType,Mode=TwoWay,ConverterParameter=3, Converter={StaticResource RadioButtonCheckedConverter}}" Grid.Column="1"></RadioButton>
-                        <RadioButton Margin="6" Grid.Row="2" Content="Yolov8_Float16_Cpu" IsEnabled="{Binding Yolov8_Float16_Cpu,Mode=OneWay}" IsChecked="{Binding Path=MType,Mode=TwoWay,ConverterParameter=4, Converter={StaticResource RadioButtonCheckedConverter}}"></RadioButton>
-                        <RadioButton Margin="6" Grid.Row="2" Content="Yolov8_Float32_Cpu" IsEnabled="{Binding Yolov8_Float32_Cpu,Mode=OneWay}" IsChecked="{Binding Path=MType,Mode=TwoWay,ConverterParameter=5, Converter={StaticResource RadioButtonCheckedConverter}}" Grid.Column="1"></RadioButton>
-                        <RadioButton Margin="6" Grid.Row="3" Content="Yolov11_Float16_Cpu" IsEnabled="{Binding Yolov11_Float16_Cpu,Mode=OneWay}" IsChecked="{Binding Path=MType,Mode=TwoWay,ConverterParameter=6, Converter={StaticResource RadioButtonCheckedConverter}}"></RadioButton>
-                        <RadioButton Margin="6" Grid.Row="3" Content="Yolov11_Float32_Cpu" IsEnabled="{Binding Yolov11_Float32_Cpu,Mode=OneWay}" IsChecked="{Binding Path=MType,Mode=TwoWay,ConverterParameter=7, Converter={StaticResource RadioButtonCheckedConverter}}" Grid.Column="1"></RadioButton>
+                        <RadioButton Margin="6" Grid.Row="0" Content="Yolov8_Float16_n" IsEnabled="{Binding Yolov8_Float16_n,Mode=OneWay}" IsChecked="{Binding Path=MType,Mode=TwoWay,ConverterParameter=0, Converter={StaticResource RadioButtonCheckedConverter}}"></RadioButton>
+                        <RadioButton Margin="6" Grid.Row="0" Content="Yolov8_Float32_n" IsEnabled="{Binding Yolov8_Float32_n,Mode=OneWay}" IsChecked="{Binding Path=MType,Mode=TwoWay,ConverterParameter=1, Converter={StaticResource RadioButtonCheckedConverter}}" Grid.Column="1"></RadioButton>
+                        <RadioButton Margin="6" Grid.Row="1" Content="Yolov11_Float16_n" IsEnabled="{Binding Yolov11_Float16_n,Mode=OneWay}" IsChecked="{Binding Path=MType,Mode=TwoWay,ConverterParameter=2, Converter={StaticResource RadioButtonCheckedConverter}}"></RadioButton>
+                        <RadioButton Margin="6" Grid.Row="1" Content="Yolov11_Float32_n" IsEnabled="{Binding Yolov11_Float32_n,Mode=OneWay}" IsChecked="{Binding Path=MType,Mode=TwoWay,ConverterParameter=3, Converter={StaticResource RadioButtonCheckedConverter}}" Grid.Column="1"></RadioButton>
+                        <RadioButton Margin="6" Grid.Row="2" Content="Yolov8_Float16_s" IsEnabled="{Binding Yolov8_Float16_s,Mode=OneWay}" IsChecked="{Binding Path=MType,Mode=TwoWay,ConverterParameter=4, Converter={StaticResource RadioButtonCheckedConverter}}"></RadioButton>
+                        <RadioButton Margin="6" Grid.Row="2" Content="Yolov8_Float32_s" IsEnabled="{Binding Yolov8_Float32_s,Mode=OneWay}" IsChecked="{Binding Path=MType,Mode=TwoWay,ConverterParameter=5, Converter={StaticResource RadioButtonCheckedConverter}}" Grid.Column="1"></RadioButton>
+                        <RadioButton Margin="6" Grid.Row="3" Content="Yolov11_Float16_s" IsEnabled="{Binding Yolov11_Float16_s,Mode=OneWay}" IsChecked="{Binding Path=MType,Mode=TwoWay,ConverterParameter=6, Converter={StaticResource RadioButtonCheckedConverter}}"></RadioButton>
+                        <RadioButton Margin="6" Grid.Row="3" Content="Yolov11_Float32_s" IsEnabled="{Binding Yolov11_Float32_s,Mode=OneWay}" IsChecked="{Binding Path=MType,Mode=TwoWay,ConverterParameter=7, Converter={StaticResource RadioButtonCheckedConverter}}" Grid.Column="1"></RadioButton>
                     </Grid>
                 </GroupBox>
                 <GroupBox Grid.Row="2" Header="参数"
@@ -143,7 +143,7 @@ Style="{StaticResource MaterialDesignOutlinedNumericUpDown}" Cursor="IBeam"
   Background="{DynamicResource PrimaryHueLightBrush}"
   Foreground="{DynamicResource PrimaryHueLightForegroundBrush}" Cursor="">
                     <Grid>
-                        <DataGrid Grid.Row="0" Height="150" x:Name="TestResultFileListGrid"
+                        <DataGrid Grid.Row="0" Height="100" x:Name="TestResultFileListGrid"
   AutoGenerateColumns="False"  SelectionChanged="DataGrid_SelectionChanged"  VerticalScrollBarVisibility="Visible"
   CanUserAddRows="False"
   HeadersVisibility="None"
@@ -183,10 +183,10 @@ Style="{StaticResource MaterialDesignOutlinedNumericUpDown}" Cursor="IBeam"
             </Grid>
             <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition Width="auto"></ColumnDefinition>
                         <ColumnDefinition Width="*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-                    <Expander x:Name="window"
+                    <!--<Expander x:Name="window"
     ExpandDirection="Right">
                         <Expander.Header>
                             <TextBlock
@@ -198,19 +198,19 @@ Style="{StaticResource MaterialDesignOutlinedNumericUpDown}" Cursor="IBeam"
                                 </TextBlock.LayoutTransform>
                             </TextBlock>
                         </Expander.Header>
-                        <StackPanel
+                        <StackPanel materialDesign:ScrollBarAssist.ButtonsVisibility="Visible" 
       Margin="8,24,16,24"
       Orientation="Vertical"
-      TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
-                            <RichTextBox  x:Name="richtextBox2" VerticalAlignment="Top" Margin="2" BorderBrush="AliceBlue" Width="100" VerticalScrollBarVisibility="Auto" BorderThickness="1" IsReadOnly="True">
+      TextBlock.Foreground="{DynamicResource MaterialDesignBody}">-->
+                            <RichTextBox  x:Name="richtextBox2" VerticalAlignment="Top" Margin="2" BorderBrush="AliceBlue" Width="150" VerticalScrollBarVisibility="Auto" BorderThickness="1" IsReadOnly="True">
                                 <FlowDocument>
                                     <Paragraph>
                                         <Run Text="{Binding Text}"/>
                                     </Paragraph>
                                 </FlowDocument>
                             </RichTextBox>
-                        </StackPanel>
-                    </Expander>
+                        <!--</StackPanel>
+                    </Expander>-->
                     <!--<Border BorderThickness="1 1 1 1" BorderBrush="{DynamicResource PrimaryHueDarkBrush}">
                                     <Grid Grid.Row="1">-->
                     <GDIWpfControl:GDIControlWPF SizeChanged="GWpf2_SizeChanged" Grid.Column="1" x:Name="GWpf2">

@@ -2,53 +2,61 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows10.0.22000.0</TargetFramework>
+    <TargetFramework>net10.0-windows10.0.22000.0</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <LangVersion>preview</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="YoloSharp\**" />
+    <Compile Remove="PreTrainedModels\F16\**" />
+    <Compile Remove="PreTrainedModels\F32\**" />
+    <EmbeddedResource Remove="PreTrainedModels\F16\**" />
+    <EmbeddedResource Remove="PreTrainedModels\F32\**" />
     <EmbeddedResource Remove="YoloSharp\**" />
-    <None Remove="YoloSharp\**" />
-    <Page Remove="YoloSharp\**" />
+    <None Remove="PreTrainedModels\F16\**" />
+    <None Remove="PreTrainedModels\F32\**" />
+    <Page Remove="PreTrainedModels\F16\**" />
+    <Page Remove="PreTrainedModels\F32\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Dll\MaterialDesignColors.dll" />
-    <None Remove="Dll\MaterialDesignThemes.Wpf.dll" />
-    <None Remove="Dll\Microsoft.Xaml.Behaviors.dll" />
-    <None Remove="PreTrainedModels\F16\yolov11n-seg.bin" />
-    <None Remove="PreTrainedModels\F16\yolov8n-seg.bin" />
-    <None Remove="PreTrainedModels\F32\yolov11n-seg.bin" />
-    <None Remove="PreTrainedModels\F32\yolov8n-seg.bin" />
+    <None Remove="LibTorchSharp.dll" />
+    <None Remove="mobile_sam.pt" />
+    <None Remove="PreTrainedModels\yolov11n-seg.bin" />
+    <None Remove="PreTrainedModels\yolov11s-seg.bin" />
+    <None Remove="PreTrainedModels\yolov8n-seg.bin" />
+    <None Remove="PreTrainedModels\yolov8s-seg.bin" />
+    <None Remove="SamModels\mobile_sam.pt" />
+    <None Remove="SamModels\sam_vit_b_01ec64.pth" />
+    <None Remove="sam_vit_b_01ec64.pth" />
     <None Remove="WConfig.json" />
     <None Remove="XJULogo.ico" />
     <None Remove="XJULogob.ico" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Dll\MaterialDesignColors.dll">
+    <Content Include="LibTorchSharp.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Dll\MaterialDesignThemes.Wpf.dll">
+    <Content Include="PreTrainedModels\yolov11n-seg.bin">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Dll\Microsoft.Xaml.Behaviors.dll">
+    <Content Include="PreTrainedModels\yolov11s-seg.bin">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="PreTrainedModels\F16\yolov11n-seg.bin">
+    <Content Include="PreTrainedModels\yolov8n-seg.bin">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="PreTrainedModels\F16\yolov8n-seg.bin">
+    <Content Include="PreTrainedModels\yolov8s-seg.bin">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="PreTrainedModels\F32\yolov11n-seg.bin">
+    <Content Include="SamModels\mobile_sam.pt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="PreTrainedModels\F32\yolov8n-seg.bin">
+    <Content Include="SamModels\sam_vit_b_01ec64.pth">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="WConfig.json">
@@ -63,33 +71,45 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="libtorch-cpu-win-x64" Version="2.5.1" />
-    <PackageReference Include="libtorch-cuda-12.1-win-x64" Version="2.5.1" />
-    <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="14.6.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="NumpyDotNet" Version="0.9.87.2" />
-    <PackageReference Include="TorchSharp" Version="0.105.0" />
-    <PackageReference Include="TorchVision" Version="0.105.0" />
+    <PackageReference Include="OpenCvSharp4" Version="4.11.0.20250507" />
+    <PackageReference Include="OpenCvSharp4.runtime.win" Version="4.11.0.20250507" />
+    <PackageReference Include="SkiaSharp" Version="3.119.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GDIWpfControl\GDIWpfControl.csproj" />
-    <ProjectReference Include="..\YoloSharp\YoloSharp.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <Reference Include="GdiWpfControl">
+      <HintPath>..\DLL\GdiWpfControl.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Protobuf">
+      <HintPath>..\..\..\..\TorchSharp\SamSharp-master\SamSharp-master\SamSharp\bin\x64\Release\net10.0\Google.Protobuf.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\..\..\..\TorchSharp\SamSharp-master\SamSharp-master\SamSharp\bin\x64\Release\net10.0\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="IntptrMax.YoloSharp">
+      <HintPath>..\..\..\..\TorchSharp\YoloSharp-master\YoloSharp-master\YoloSharp\bin\x64\Release\net10.0\IntptrMax.YoloSharp.dll</HintPath>
+    </Reference>
     <Reference Include="MaterialDesignColors">
-      <HintPath>..\..\..\Github\MaterialDesignInXamlToolkit-20250615\MaterialDesignInXamlToolkit-master\src\MaterialDesignThemes.Wpf\bin\Release\net8.0-windows\MaterialDesignColors.dll</HintPath>
+      <HintPath>..\..\..\..\Github\MaterialDesignInXamlToolkit-20250918\MaterialDesignInXamlToolkit-master\src\MaterialDesignThemes.Wpf\bin\Release\net8.0-windows\MaterialDesignColors.dll</HintPath>
     </Reference>
     <Reference Include="MaterialDesignThemes.Wpf">
-      <HintPath>..\..\..\Github\MaterialDesignInXamlToolkit-20250615\MaterialDesignInXamlToolkit-master\src\MaterialDesignThemes.Wpf\bin\Release\net8.0-windows\MaterialDesignThemes.Wpf.dll</HintPath>
+      <HintPath>..\..\..\..\Github\MaterialDesignInXamlToolkit-20250918\MaterialDesignInXamlToolkit-master\src\MaterialDesignThemes.Wpf\bin\Release\net8.0-windows\MaterialDesignThemes.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xaml.Behaviors">
-      <HintPath>..\..\..\Github\MaterialDesignInXamlToolkit-20250615\MaterialDesignInXamlToolkit-master\src\MaterialDesignThemes.Wpf\bin\Release\net8.0-windows\Microsoft.Xaml.Behaviors.dll</HintPath>
+      <HintPath>..\..\..\..\Github\MaterialDesignInXamlToolkit-20250918\MaterialDesignInXamlToolkit-master\src\MaterialDesignThemes.Wpf\bin\Release\net8.0-windows\Microsoft.Xaml.Behaviors.dll</HintPath>
+    </Reference>
+    <Reference Include="SamSharp">
+      <HintPath>..\..\..\..\TorchSharp\SamSharp-master\SamSharp-master\SamSharp\bin\x64\Release\net10.0\SamSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="TorchSharp">
+      <HintPath>..\..\..\..\TorchSharp\YoloSharp-master\YoloSharp-master\YoloSharp\bin\x64\Release\net10.0\TorchSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="TorchVision">
+      <HintPath>..\..\..\..\TorchSharp\YoloSharp-master\YoloSharp-master\YoloSharp\bin\x64\Release\net10.0\TorchVision.dll</HintPath>
     </Reference>
   </ItemGroup>
 
-  <ItemGroup>
+   <ItemGroup>
     <Compile Update="Properties\Settings.Designer.cs">
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <AutoGen>True</AutoGen>
@@ -103,5 +123,4 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
-
 </Project>
