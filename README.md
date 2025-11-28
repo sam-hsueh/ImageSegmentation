@@ -4,14 +4,15 @@
 
 UI框架是https://github.com/MaterialDesignInXAML/MaterialDesignInXamlToolkit;
 
-下载https://download.pytorch.org/libtorch/cu130/libtorch-win-shared-with-deps-2.9.0%2Bcu130.zip文件
-将上述文件解压后，将...libtorch-win-shared-with-deps-2.9.0+cu130\libtorch\lib文件夹下的DLL文件拷贝至...\bin\...runtimes\win-x64\native文件夹下;
+Download the file from https://download.pytorch.org/libtorch/cu130/libtorch-win-shared-with-deps-2.9.0%2Bcu130.zip
+After unzipping the above file, copy the DLL files under the folder ...libtorch-win-shared-with-deps-2.9.0+cu130\libtorch\lib to the folder ...\bin...runtimes\win-x64\native;
 
-下载https://huggingface.co/datasets/Gourieff/ReActor/resolve/main/models/sams/sam_vit_b_01ec64.pth拷贝至SamModels文件夹下;
+Download the file from https://huggingface.co/datasets/Gourieff/ReActor/resolve/main/models/sams/sam_vit_b_01ec64.pth;
+Copy it to the SamModels folder;
 
-引用DLL目录下所有文件;
+Reference all files in the DLL directory;
 
-标注、训练、预测：
+Annotation, training, prediction:
 
 <img width="1920" height="1140" alt="屏幕截图 2025-11-12 120104" src="https://github.com/user-attachments/assets/0649f741-be64-475d-823e-75fc3a9d4728" />
 
