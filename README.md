@@ -12,6 +12,9 @@ UI框架是https://github.com/MaterialDesignInXAML/MaterialDesignInXamlToolkit;
 引用DLL目录下所有文件;
 
 标注、训练、预测：
-![屏幕截图 2025-05-21 231146](https://github.com/user-attachments/assets/df3ba4ea-9cd3-4d5d-a9df-a6d099d03bb7)
-![屏幕截图 2025-05-21 231248](https://github.com/user-attachments/assets/4d9a11c6-7709-41aa-b108-342a0fc9cf41)
-![屏幕截图 2025-05-21 230422](https://github.com/user-attachments/assets/0e34ecb6-3b5a-46f8-9c98-5ae272881f0a)
+<img width="1920" height="1140" alt="屏幕截图 2025-11-12 120319" src="https://github.com/user-attachments/assets/9dac0810-bfcd-4cb7-9c99-ee7f94df7eb9" />
+
+<img width="1920" height="1140" alt="屏幕截图 2025-11-28 234227" src="https://github.com/user-attachments/assets/65c9a070-e149-4a3c-a19b-d60aa50cf300" />
+
+<img width="1920" height="1140" alt="屏幕截图 2025-11-12 185103" src="https://github.com/user-attachments/assets/a2f2b51b-b0c5-414c-a535-7c6633886a87" />
+
