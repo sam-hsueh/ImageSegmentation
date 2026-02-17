@@ -1,13 +1,18 @@
-这是一个标注、训练、实例分割于一体的方案;
+This is an integrated solution for annotation, training, and instance segmentation;
 
-训练和预测部分是按https://github.com/IntptrMax/YoloSharp 的代码添加了UI;
+The training and prediction parts have added a UI based on the code from https://github.com/IntptrMax/YoloSharp;
 
-UI框架是https://github.com/MaterialDesignInXAML/MaterialDesignInXamlToolkit;
+The UI framework is base on https://github.com/MaterialDesignInXAML/MaterialDesignInXamlToolkit;
 
-Download the file from https://download.pytorch.org/libtorch/cu130/libtorch-win-shared-with-deps-2.9.0%2Bcu130.zip
-After unzipping the above file, copy the DLL files under the folder ...libtorch-win-shared-with-deps-2.9.0+cu130\libtorch\lib to the folder ...\bin...runtimes\win-x64\native;
+Download the file from https://download.pytorch.org/libtorch/cu130/libtorch-win-shared-with-deps-2.10.0%2Bcu130.zip
+After unzipping the above file, copy the DLL files under the folder ...libtorch-win-shared-with-deps-2.10.0+cu130\libtorch\lib to this folder ...\bin...runtimes\win-x64\native;
+
+Copy LibTorch.dll file to this folder ...\bin...runtimes\win-x64\native from DLL folder;
 
 Download the file from https://huggingface.co/datasets/Gourieff/ReActor/resolve/main/models/sams/sam_vit_b_01ec64.pth;
+Copy it to the SamModels folder;
+
+Download the file from https://huggingface.co/RogerQi/MobileSAMV2/resolve/main/mobile_sam.pt?download=true
 Copy it to the SamModels folder;
 
 Reference all files in the DLL directory;
