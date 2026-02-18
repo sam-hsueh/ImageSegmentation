@@ -51,6 +51,9 @@ namespace ImageFeatureDetection
         {
             InitializeComponent();
             LoadModel();
+            timer = new System.Windows.Forms.Timer();
+            timer.Interval = 50;
+            timer.Tick += new System.EventHandler(timer_Tick);
             Loaded += Home_Loaded;
             //try
             //{
@@ -117,11 +120,10 @@ namespace ImageFeatureDetection
             mwv!.mainW = this;
             curDir = Properties.Settings.Default.InitDir;
             DataGrid_SelectionChanged(null, null);
-            var timer = new System.Windows.Forms.Timer();
-            timer.Interval = 50;
-            timer.Tick += new System.EventHandler(timer_Tick);
             timer.Start();
         }
+
+        System.Windows.Forms.Timer timer;
         public int ctime = 5;
         private void timer_Tick(object? sender, EventArgs e)
         {
@@ -129,7 +131,10 @@ namespace ImageFeatureDetection
                 DrawF();
             ctime--;
             if (ctime < 0)
-                ctime = 0;
+            {
+                timer.Stop();
+                ctime = 5;
+            }
         }
 
         private void Home_Closing(object? sender, System.ComponentModel.CancelEventArgs e)

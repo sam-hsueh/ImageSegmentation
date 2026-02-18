@@ -76,6 +76,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\TorchSharp\SamSharp-master\SamSharp-master\SamSharp\SamSharp.csproj" />
+    <ProjectReference Include="..\..\..\..\TorchSharp\YoloSharp-master\YoloSharp\YoloSharp.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="GdiWpfControl">
       <HintPath>..\DLL\GdiWpfControl.dll</HintPath>
     </Reference>

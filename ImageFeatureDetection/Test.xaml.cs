@@ -29,6 +29,9 @@ namespace ImageFeatureDetection
         public Test()
         {
             InitializeComponent();
+            timer = new System.Windows.Forms.Timer();
+            timer.Interval = 250;
+            timer.Tick += new System.EventHandler(timer_Tick);
             Loaded += Test_Loaded;
         }
 
@@ -37,11 +40,21 @@ namespace ImageFeatureDetection
             System.Windows.Window? window =  System.Windows.Window.GetWindow(this);
             mwv = this.DataContext as MainWindowViewModel;
             mwv!.testW = this;
-            var timer = new System.Windows.Forms.Timer();
-            timer.Interval = 250;
-            timer.Tick += new System.EventHandler(timer_Tick);
             timer.Start();
 
+        }
+        System.Windows.Forms.Timer timer;
+        public int ctime = 5;
+        private void timer_Tick(object? sender, EventArgs e)
+        {
+            if (ctime > 0)
+                DrawToGraphics(sourceBitmap);
+            ctime--;
+            if (ctime < 0)
+            {
+                timer.Stop();
+                ctime = 5;
+            }
         }
         public ObservableCollection<SelectableFiles> FileList = new ObservableCollection<SelectableFiles>();
         public ObservableCollection<SelectableFiles> TFileList = new ObservableCollection<SelectableFiles>();
@@ -215,175 +228,62 @@ namespace ImageFeatureDetection
                 return;
             //window.IsExpanded = true;
             richtextBox2.Document.Blocks.Clear();
-            int numClasses = Properties.Settings.Default.NumClasses;
-            Config config;
+            //int numClasses = Properties.Settings.Default.NumClasses;
+            Config config = new Config
+            {
+                DeviceType = DeviceType.CUDA,
+                ScalarType = ScalarType.Float32,
+                YoloType = YoloType.Yolov11,
+                YoloSize = YoloSize.s,
+                TaskType = TaskType.Segmentation,
+                ImageProcessType = ImageProcessType.Mosiac,
+                //ImageSize = 640,
+                //BatchSize = 16,
+                NumberClass = 80,
+                PredictThreshold = 0.3f,
+                IouThreshold = 0.7f,
+            };
             if (mwv!.MType == ModelType.Yolov8_Float16_n)
             {
-                config = new Config
-                {
-                    DeviceType = DeviceType.CUDA,
-                    ScalarType = ScalarType.Float16,
-                    //RootPath = preTrainedModelPath,
-                    YoloType = YoloType.Yolov8,
-                    YoloSize = YoloSize.n,
-                    TaskType = TaskType.Segmentation,
-                    ImageProcessType = ImageProcessType.Mosiac,
-                    //ImageSize = 640,
-                    //BatchSize = 16,
-                    NumberClass = 80,
-                    PredictThreshold = 0.3f,
-                    IouThreshold = 0.7f,
-                    //Workers = 4,
-                    //Epochs = 100,
-                };
-                //yoloTask = new YoloTask(TaskType.Segmentation, numClasses, yoloType: YoloType.Yolov8, deviceType:  DeviceType.CUDA, yoloSize:  YoloSize.n, dtype:  ScalarType.Float16);
+                config.ScalarType = ScalarType.Float16;
+                config.YoloType = YoloType.Yolov8;
+                config.YoloSize = YoloSize.n;
             }
             else if (mwv!.MType == ModelType.Yolov8_Float32_n)
             {
-                config = new Config
-                {
-                    DeviceType = DeviceType.CUDA,
-                    ScalarType = ScalarType.Float32,
-                    //RootPath = preTrainedModelPath,
-                    YoloType = YoloType.Yolov8,
-                    YoloSize = YoloSize.n,
-                    TaskType = TaskType.Segmentation,
-                    ImageProcessType = ImageProcessType.Mosiac,
-                    //ImageSize = 640,
-                    //BatchSize = 16,
-                    NumberClass = 80,
-                    PredictThreshold = 0.3f,
-                    IouThreshold = 0.7f,
-                    //Workers = 4,
-                    //Epochs = 100,
-                };
-                //yoloTask = new YoloTask(TaskType.Segmentation, numClasses, yoloType: YoloType.Yolov8, deviceType: DeviceType.CUDA, yoloSize: YoloSize.n, dtype: ScalarType.Float32);
+                config.ScalarType = ScalarType.Float32;
+                config.YoloType = YoloType.Yolov8;
+                config.YoloSize = YoloSize.n;
             }
             else if (mwv!.MType == ModelType.Yolov11_Float16_n)
             {
-                config = new Config
-                {
-                    DeviceType = DeviceType.CUDA,
-                    ScalarType = ScalarType.Float16,
-                    //RootPath = preTrainedModelPath,
-                    YoloType = YoloType.Yolov11,
-                    YoloSize = YoloSize.n,
-                    TaskType = TaskType.Segmentation,
-                    ImageProcessType = ImageProcessType.Mosiac,
-                    //ImageSize = 640,
-                    //BatchSize = 16,
-                    NumberClass = 80,
-                    PredictThreshold = 0.3f,
-                    IouThreshold = 0.7f,
-                    //Workers = 4,
-                    //Epochs = 100,
-                };
-                //yoloTask = new YoloTask(TaskType.Segmentation, numClasses, yoloType: YoloType.Yolov11, deviceType: DeviceType.CUDA, yoloSize: YoloSize.n, dtype: ScalarType.Float16);
+                config.ScalarType = ScalarType.Float16;
+                config.YoloType = YoloType.Yolov11;
+                config.YoloSize = YoloSize.n;
             }
             else if (mwv!.MType == ModelType.Yolov11_Float32_n)
             {
-                config = new Config
-                {
-                    DeviceType = DeviceType.CUDA,
-                    ScalarType = ScalarType.Float32,
-                    //RootPath = preTrainedModelPath,
-                    YoloType = YoloType.Yolov11,
-                    YoloSize = YoloSize.n,
-                    TaskType = TaskType.Segmentation,
-                    ImageProcessType = ImageProcessType.Mosiac,
-                    //ImageSize = 640,
-                    //BatchSize = 16,
-                    NumberClass = 80,
-                    PredictThreshold = 0.3f,
-                    IouThreshold = 0.7f,
-                    //Workers = 4,
-                    //Epochs = 100,
-                };
-                //yoloTask = new YoloTask(TaskType.Segmentation, numClasses, yoloType: YoloType.Yolov11, deviceType: DeviceType.CUDA, yoloSize: YoloSize.n, dtype: ScalarType.Float32);
+                config.ScalarType = ScalarType.Float32;
+                config.YoloType = YoloType.Yolov11;
+                config.YoloSize = YoloSize.n;
             }
             else if (mwv!.MType == ModelType.Yolov8_Float16_s)
             {
-                config = new Config
-                {
-                    DeviceType = DeviceType.CUDA,
-                    ScalarType = ScalarType.Float16,
-                    //RootPath = preTrainedModelPath,
-                    YoloType = YoloType.Yolov8,
-                    YoloSize = YoloSize.s,
-                    TaskType = TaskType.Segmentation,
-                    ImageProcessType = ImageProcessType.Mosiac,
-                    //ImageSize = 640,
-                    //BatchSize = 16,
-                    NumberClass = 80,
-                    PredictThreshold = 0.3f,
-                    IouThreshold = 0.7f,
-                    //Workers = 4,
-                    //Epochs = 100,
-                };
-                //yoloTask = new YoloTask(TaskType.Segmentation, numClasses, yoloType: YoloType.Yolov8, deviceType: DeviceType.CUDA, yoloSize: YoloSize.s, dtype: ScalarType.Float16);
+                config.ScalarType = ScalarType.Float16;
+                config.YoloType = YoloType.Yolov8;
+                config.YoloSize = YoloSize.s;
             }
             else if (mwv!.MType == ModelType.Yolov8_Float32_s)
             {
-                config = new Config
-                {
-                    DeviceType = DeviceType.CUDA,
-                    ScalarType = ScalarType.Float32,
-                    //RootPath = preTrainedModelPath,
-                    YoloType = YoloType.Yolov8,
-                    YoloSize = YoloSize.s,
-                    TaskType = TaskType.Segmentation,
-                    ImageProcessType = ImageProcessType.Mosiac,
-                    //ImageSize = 640,
-                    //BatchSize = 16,
-                    NumberClass = 80,
-                    PredictThreshold = 0.3f,
-                    IouThreshold = 0.7f,
-                    //Workers = 4,
-                    //Epochs = 100,
-                };
-                //yoloTask = new YoloTask(TaskType.Segmentation, numClasses, yoloType: YoloType.Yolov8, deviceType: DeviceType.CUDA, yoloSize: YoloSize.s, dtype: ScalarType.Float32);
+                config.ScalarType = ScalarType.Float32;
+                config.YoloType = YoloType.Yolov8;
+                config.YoloSize = YoloSize.s;
             }
             else if (mwv!.MType == ModelType.Yolov11_Float16_s)
             {
-                config = new Config
-                {
-                    DeviceType = DeviceType.CUDA,
-                    ScalarType = ScalarType.Float16,
-                    //RootPath = preTrainedModelPath,
-                    YoloType = YoloType.Yolov11,
-                    YoloSize = YoloSize.s,
-                    TaskType = TaskType.Segmentation,
-                    ImageProcessType = ImageProcessType.Mosiac,
-                    //ImageSize = 640,
-                    //BatchSize = 16,
-                    NumberClass = 80,
-                    PredictThreshold = 0.3f,
-                    IouThreshold = 0.7f,
-                    //Workers = 4,
-                    //Epochs = 100,
-                };
-                //yoloTask = new YoloTask(TaskType.Segmentation, numClasses, yoloType: YoloType.Yolov11, deviceType: DeviceType.CUDA, yoloSize: YoloSize.s, dtype: ScalarType.Float16);
-            }
-            else
-            {
-                config = new Config
-                {
-                    DeviceType = DeviceType.CUDA,
-                    ScalarType = ScalarType.Float32,
-                    //RootPath = preTrainedModelPath,
-                    YoloType = YoloType.Yolov11,
-                    YoloSize = YoloSize.s,
-                    TaskType = TaskType.Segmentation,
-                    ImageProcessType = ImageProcessType.Mosiac,
-                    //ImageSize = 640,
-                    //BatchSize = 16,
-                    NumberClass = 80,
-                    PredictThreshold = 0.3f,
-                    IouThreshold = 0.7f,
-                    //Workers = 4,
-                    //Epochs = 100,
-                };
-                //yoloTask = new YoloTask(TaskType.Segmentation, numClasses, yoloType: YoloType.Yolov11, deviceType: DeviceType.CUDA, yoloSize: YoloSize.s, dtype: ScalarType.Float32);
+                config.ScalarType = ScalarType.Float16;
+                config.YoloType = YoloType.Yolov11;
+                config.YoloSize = YoloSize.s;               
             }
             yoloTask = new YoloTask(config);
             yoloTask.LoadModel(ModelName, skipNcNotEqualLayers: true, func);
@@ -549,11 +449,7 @@ namespace ImageFeatureDetection
         {
             DrawToGraphics(sourceBitmap);
         }
-        public void timer_Tick(object sender, EventArgs e)
-        {
-            //mwv?.GetLaserDataCommand.Execute(null);
-            DrawToGraphics(sourceBitmap);
-        }
+
         /// <summary>
         /// 8位转24位
         /// </summary>
